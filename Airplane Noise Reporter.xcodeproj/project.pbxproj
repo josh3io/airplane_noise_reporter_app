@@ -7,13 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C964D79D1B6559B400D691C5 /* LocationArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = C964D79C1B6559B400D691C5 /* LocationArray.plist */; };
+		C964D7A11B657CE200D691C5 /* HamburgerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7A01B657CE200D691C5 /* HamburgerButton.swift */; };
+		C964D7A31B657E2200D691C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C964D7A21B657E2200D691C5 /* Main.storyboard */; };
+		C964D7A71B657EE200D691C5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7A41B657EE200D691C5 /* LoginViewController.swift */; };
+		C964D7A81B657EE200D691C5 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7A51B657EE200D691C5 /* SignupViewController.swift */; };
+		C964D7A91B657EE200D691C5 /* MenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7A61B657EE200D691C5 /* MenuController.swift */; };
+		C964D7AD1B657F2D00D691C5 /* AirplaneNoiseUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7AC1B657F2D00D691C5 /* AirplaneNoiseUser.swift */; };
+		C964D7B21B6581E200D691C5 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C964D7B11B6581E200D691C5 /* SWRevealViewController.m */; };
 		C98DB7121B64327C00AE7991 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7111B64327C00AE7991 /* AppDelegate.swift */; };
 		C98DB7151B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7131B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld */; };
-		C98DB7171B64327C00AE7991 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7161B64327C00AE7991 /* ViewController.swift */; };
-		C98DB71A1B64327C00AE7991 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C98DB7181B64327C00AE7991 /* Main.storyboard */; };
 		C98DB71C1B64327C00AE7991 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C98DB71B1B64327C00AE7991 /* Images.xcassets */; };
 		C98DB71F1B64327C00AE7991 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C98DB71D1B64327C00AE7991 /* LaunchScreen.xib */; };
 		C98DB72B1B64327C00AE7991 /* Airplane_Noise_ReporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB72A1B64327C00AE7991 /* Airplane_Noise_ReporterTests.swift */; };
+		C98DB7351B64333900AE7991 /* AirplaneNoiseApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7341B64333900AE7991 /* AirplaneNoiseApi.swift */; };
+		C98DB7371B64345F00AE7991 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7361B64345F00AE7991 /* SwiftyJSON.swift */; };
+		C98DB7391B6434E700AE7991 /* LocationShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7381B6434E700AE7991 /* LocationShareManager.swift */; };
+		C98DB73B1B64357A00AE7991 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB73A1B64357A00AE7991 /* MapViewController.swift */; };
+		C98DB73D1B64376200AE7991 /* MapAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB73C1B64376200AE7991 /* MapAnnotation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,17 +38,30 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C964D79C1B6559B400D691C5 /* LocationArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = LocationArray.plist; sourceTree = "<group>"; };
+		C964D7A01B657CE200D691C5 /* HamburgerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerButton.swift; sourceTree = "<group>"; };
+		C964D7A21B657E2200D691C5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C964D7A41B657EE200D691C5 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		C964D7A51B657EE200D691C5 /* SignupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
+		C964D7A61B657EE200D691C5 /* MenuController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuController.swift; sourceTree = "<group>"; };
+		C964D7AC1B657F2D00D691C5 /* AirplaneNoiseUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirplaneNoiseUser.swift; sourceTree = "<group>"; };
+		C964D7AF1B6581E200D691C5 /* Airplane Noise Reporter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Airplane Noise Reporter-Bridging-Header.h"; sourceTree = "<group>"; };
+		C964D7B01B6581E200D691C5 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		C964D7B11B6581E200D691C5 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		C98DB70C1B64327C00AE7991 /* Airplane Noise Reporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Airplane Noise Reporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98DB7101B64327C00AE7991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C98DB7111B64327C00AE7991 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C98DB7141B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Airplane_Noise_Reporter.xcdatamodel; sourceTree = "<group>"; };
-		C98DB7161B64327C00AE7991 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		C98DB7191B64327C00AE7991 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C98DB71B1B64327C00AE7991 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C98DB71E1B64327C00AE7991 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		C98DB7241B64327C00AE7991 /* Airplane Noise ReporterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Airplane Noise ReporterTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98DB7291B64327C00AE7991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C98DB72A1B64327C00AE7991 /* Airplane_Noise_ReporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Airplane_Noise_ReporterTests.swift; sourceTree = "<group>"; };
+		C98DB7341B64333900AE7991 /* AirplaneNoiseApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AirplaneNoiseApi.swift; sourceTree = "<group>"; };
+		C98DB7361B64345F00AE7991 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		C98DB7381B6434E700AE7991 /* LocationShareManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationShareManager.swift; sourceTree = "<group>"; };
+		C98DB73A1B64357A00AE7991 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		C98DB73C1B64376200AE7991 /* MapAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapAnnotation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +82,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C964D7AE1B6581CA00D691C5 /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C964D7B01B6581E200D691C5 /* SWRevealViewController.h */,
+				C964D7B11B6581E200D691C5 /* SWRevealViewController.m */,
+				C964D7AF1B6581E200D691C5 /* Airplane Noise Reporter-Bridging-Header.h */,
+			);
+			name = SWRevealViewController;
+			sourceTree = "<group>";
+		};
 		C98DB7031B64327C00AE7991 = {
 			isa = PBXGroup;
 			children = (
@@ -79,13 +113,24 @@
 		C98DB70E1B64327C00AE7991 /* Airplane Noise Reporter */ = {
 			isa = PBXGroup;
 			children = (
+				C964D7AE1B6581CA00D691C5 /* SWRevealViewController */,
+				C964D7A41B657EE200D691C5 /* LoginViewController.swift */,
+				C964D7A51B657EE200D691C5 /* SignupViewController.swift */,
+				C964D7A61B657EE200D691C5 /* MenuController.swift */,
+				C964D7A21B657E2200D691C5 /* Main.storyboard */,
+				C964D7A01B657CE200D691C5 /* HamburgerButton.swift */,
+				C964D79C1B6559B400D691C5 /* LocationArray.plist */,
+				C98DB73C1B64376200AE7991 /* MapAnnotation.swift */,
 				C98DB7111B64327C00AE7991 /* AppDelegate.swift */,
-				C98DB7161B64327C00AE7991 /* ViewController.swift */,
-				C98DB7181B64327C00AE7991 /* Main.storyboard */,
 				C98DB71B1B64327C00AE7991 /* Images.xcassets */,
 				C98DB71D1B64327C00AE7991 /* LaunchScreen.xib */,
 				C98DB7131B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld */,
 				C98DB70F1B64327C00AE7991 /* Supporting Files */,
+				C98DB7341B64333900AE7991 /* AirplaneNoiseApi.swift */,
+				C98DB7361B64345F00AE7991 /* SwiftyJSON.swift */,
+				C98DB7381B6434E700AE7991 /* LocationShareManager.swift */,
+				C98DB73A1B64357A00AE7991 /* MapViewController.swift */,
+				C964D7AC1B657F2D00D691C5 /* AirplaneNoiseUser.swift */,
 			);
 			path = "Airplane Noise Reporter";
 			sourceTree = "<group>";
@@ -164,6 +209,7 @@
 				TargetAttributes = {
 					C98DB70B1B64327C00AE7991 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = CMW5Y3YRVR;
 					};
 					C98DB7231B64327C00AE7991 = {
 						CreatedOnToolsVersion = 6.2;
@@ -195,9 +241,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C98DB71A1B64327C00AE7991 /* Main.storyboard in Resources */,
+				C964D79D1B6559B400D691C5 /* LocationArray.plist in Resources */,
 				C98DB71F1B64327C00AE7991 /* LaunchScreen.xib in Resources */,
 				C98DB71C1B64327C00AE7991 /* Images.xcassets in Resources */,
+				C964D7A31B657E2200D691C5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -215,9 +262,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C98DB7171B64327C00AE7991 /* ViewController.swift in Sources */,
+				C98DB7391B6434E700AE7991 /* LocationShareManager.swift in Sources */,
+				C964D7A81B657EE200D691C5 /* SignupViewController.swift in Sources */,
+				C98DB7351B64333900AE7991 /* AirplaneNoiseApi.swift in Sources */,
+				C964D7A91B657EE200D691C5 /* MenuController.swift in Sources */,
 				C98DB7121B64327C00AE7991 /* AppDelegate.swift in Sources */,
+				C98DB7371B64345F00AE7991 /* SwiftyJSON.swift in Sources */,
+				C964D7B21B6581E200D691C5 /* SWRevealViewController.m in Sources */,
 				C98DB7151B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld in Sources */,
+				C964D7AD1B657F2D00D691C5 /* AirplaneNoiseUser.swift in Sources */,
+				C98DB73B1B64357A00AE7991 /* MapViewController.swift in Sources */,
+				C98DB73D1B64376200AE7991 /* MapAnnotation.swift in Sources */,
+				C964D7A71B657EE200D691C5 /* LoginViewController.swift in Sources */,
+				C964D7A11B657CE200D691C5 /* HamburgerButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,14 +297,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C98DB7181B64327C00AE7991 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C98DB7191B64327C00AE7991 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C98DB71D1B64327C00AE7991 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -342,9 +391,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Airplane Noise Reporter/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Airplane Noise Reporter/Airplane Noise Reporter-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -352,9 +405,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = "Airplane Noise Reporter/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Airplane Noise Reporter/Airplane Noise Reporter-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -411,6 +467,7 @@
 				C98DB7301B64327C00AE7991 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C98DB7311B64327C00AE7991 /* Build configuration list for PBXNativeTarget "Airplane Noise ReporterTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +476,7 @@
 				C98DB7331B64327C00AE7991 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
