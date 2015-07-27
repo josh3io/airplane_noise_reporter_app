@@ -27,7 +27,7 @@ class MapAnnotation : NSObject, MKAnnotation
         var view:MKAnnotationView = MKAnnotationView(annotation: self, reuseIdentifier: "MapAnnotationView")
         view.enabled = true
         view.canShowCallout = true
-        view.image = UIImage(named: "rsz_huglogo.png")
+        view.image = UIImage(named: "rsz_plane.png")
         
         
         return view

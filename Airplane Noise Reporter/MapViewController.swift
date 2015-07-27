@@ -28,6 +28,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var doLogoutOnLoad:Bool = false
     var doShowLogin:Bool = false
     
+    var initialZoomComplete:Bool = false
+    
     var updateTimer:NSTimer = NSTimer()
     var doingUpdateMapFromApi:Bool = false
     
@@ -60,6 +62,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(mapView: MKMapView!, didUpdateUserLocation userLocation: MKUserLocation!) {
         mapView.centerCoordinate = userLocation.location.coordinate
+        if (initialZoomComplete == false) {
+            let userLocation = mapView.userLocation
+            let region = MKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 75000, 75000)
+            let adjustedRegion = mapView.regionThatFits(region)
+            mapView.setRegion(adjustedRegion, animated: true)
+            
+            initialZoomComplete = true
+        }
     }
     
     func setDoLogoutOnLoad(set:Bool) {
@@ -94,6 +104,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
             }
             
+            
+            
         }
     }
     override func viewDidLoad() {
@@ -127,12 +139,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         }
         
         
-        
+        println("mapview request authorization")
         
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
-        
         
         
         self.doUpdateMapFromApi()
@@ -149,7 +160,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if (!self.doingUpdateMapFromApi) {
             self.doingUpdateMapFromApi = true
             
-
+            
             myAPI.getAirplaneFeed(doProcessJSONLocations)
         } else {
             println("already updating map locations")
@@ -201,11 +212,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.mapView.addAnnotations(newMarkers)
         }
         self.doingUpdateMapFromApi = false
+        
+        
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateTimer.invalidate()
+        initialZoomComplete = false
     }
     
     override func didReceiveMemoryWarning() {

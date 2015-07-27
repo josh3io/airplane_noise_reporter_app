@@ -47,6 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes:(UIUserNotificationType.Sound|UIUserNotificationType.Alert|UIUserNotificationType.Badge), categories: nil))
         application.registerForRemoteNotifications()
         
+        getLocationManager()
         
         println("location unrestricted")
         let locKey = launchOptions?[UIApplicationLaunchOptionsLocationKey] as UILocalNotification!
@@ -132,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
         self.shareModel.anotherLocationManager?.stopMonitoringSignificantLocationChanges()
-        self.shareModel.anotherLocationManager?.requestAlwaysAuthorization()
+        self.shareModel.anotherLocationManager?.requestWhenInUseAuthorization()
         self.shareModel.anotherLocationManager?.startMonitoringSignificantLocationChanges()
         self.addApplicationStatusToPList("applicationDidEnterBackground")
     }
@@ -155,7 +156,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.shareModel.anotherLocationManager = locationManager
         self.shareModel.anotherLocationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         self.shareModel.anotherLocationManager?.activityType = CLActivityType.OtherNavigation
-        self.shareModel.anotherLocationManager?.requestAlwaysAuthorization()
+        self.shareModel.anotherLocationManager?.requestWhenInUseAuthorization()
         
         self.shareModel.anotherLocationManager?.startMonitoringSignificantLocationChanges()
         

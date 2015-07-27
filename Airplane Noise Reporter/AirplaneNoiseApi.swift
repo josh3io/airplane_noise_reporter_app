@@ -9,7 +9,7 @@
 import Foundation
 
 struct _URL_STRINGS {
-    private static var BaseUrlString:NSString = "https://192.168.1.125"
+    private static var BaseUrlString:NSString = "http://192.168.1.125:8441"
     private static var AirplaneFeedUrl:NSString = BaseUrlString + "/"
     private static var ApnUrlString:NSString = BaseUrlString + "/apn"
     private static var LoginUrlString:NSString = BaseUrlString + "/login"
@@ -39,6 +39,7 @@ class AirplaneNoiseApi : NSObject
     
     func postreq(url:NSURL,formdata:NSString) -> NSMutableURLRequest {
         let request = NSMutableURLRequest(URL: url)
+        
         request.HTTPMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
