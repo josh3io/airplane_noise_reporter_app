@@ -30,7 +30,7 @@ class SignupViewController : UIViewController, UIPickerViewDelegate, UITextField
     let gender = ["I am a...","Guy","Gal"]
     
     required init(coder aDecoder:NSCoder) {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.myAPI = appDelegate.airplaneNoiseApi
         super.init(coder: aDecoder)
     }
@@ -101,7 +101,7 @@ class SignupViewController : UIViewController, UIPickerViewDelegate, UITextField
         println("signin failed")
         
         dispatch_async(dispatch_get_main_queue(),{
-            var alert = UIAlertController(title:"Oops!",message:message, preferredStyle: UIAlertControllerStyle.Alert)
+            var alert = UIAlertController(title:"Oops!",message:message as String, preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title:"OK", style:UIAlertActionStyle.Default, handler:nil))
             self.presentViewController(alert, animated: true, completion: nil)
         })
@@ -156,7 +156,7 @@ class SignupViewController : UIViewController, UIPickerViewDelegate, UITextField
         var gender:NSString = genderField.text
         var bday:NSString = bdayField.text
         
-        if (!password.isEqualToString(password2)) {
+        if (!password.isEqualToString(password2 as String)) {
             showSignupError("Make sure your password confirmation matches")
             return
         }
@@ -181,7 +181,7 @@ class SignupViewController : UIViewController, UIPickerViewDelegate, UITextField
         }
     
         
-        self.myAPI.signup(username, password: password, email: email, gender: gender, year: (year as NSNumber).stringValue, month: (month as NSNumber).stringValue, day: (day as NSNumber).stringValue, callback: signupComplete)
+        self.myAPI.signup(username as String, password: password as String, email: email as String, gender: gender as String, year: (year as NSNumber).stringValue, month: (month as NSNumber).stringValue, day: (day as NSNumber).stringValue, callback: signupComplete)
         
     }
     

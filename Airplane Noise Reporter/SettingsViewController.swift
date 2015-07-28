@@ -21,6 +21,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     
     var currentPicker:Array<String>
     var currentTitle:String
+    var currentRow:Int = 0
     
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var houseLabel: UILabel!
@@ -31,7 +32,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     
     
     required init(coder aDecoder: NSCoder) {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.myAPI = appDelegate.airplaneNoiseApi
         println("settings init\n")
         currentPicker = _us_house
@@ -61,10 +62,24 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     @IBAction func cancelButtonTapped(sender:UIButton!) {
         println("cancel")
         pickerViewView.hidden = true;
+        currentRow = 0
     }
     @IBAction func doneButtonTapped(sender:UIButton!) {
         println("done")
         pickerViewView.hidden = true
+        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if (currentPicker == _us_house) {
+            houseLabel.text = _us_house[currentRow]
+            prefs.setObject(_us_house[currentRow],forKey:"US_HOUSE")
+        } else if (currentPicker == _ca_senate) {
+            senateLabel.text = _ca_senate[currentRow]
+            prefs.setObject(_ca_senate[currentRow],forKey:"CA_SENATE")
+        } else if (currentPicker == _ca_assembly) {
+            assemblyLabel.text = _ca_assembly[currentRow]
+            prefs.setObject(_ca_assembly[currentRow],forKey:"CA_ASSEMBLY")
+        }
+        prefs.synchronize()
+        currentRow = 0
     }
     
     func pickerView(pickerView:UIPickerView, numberOfRowsInComponent component:NSInteger) -> Int {
@@ -75,9 +90,13 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         return 1;
     }
     
+    func pickerView(pickerView:UIPickerView, didSelectRow row:Int, inComponent component:Int) {
+        currentRow = row
+    }
+    
     
     func pickerView(pickerView:UIPickerView, titleForRow row:NSInteger, forComponent component:NSInteger) -> String {
-        return currentTitle;
+        return currentPicker[row]
     }
     
     func pickerView(pickerView:UIPickerView, widthForComponenet component:NSInteger) -> Int {

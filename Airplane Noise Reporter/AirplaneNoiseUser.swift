@@ -42,14 +42,5 @@ class AirplaneNoiseUser : NSObject
         return CLLocationCoordinate2D(latitude: lat, longitude: lon)
     }
     
-    func setUsername(username:String) {
-        self.username = username
-    }
-    func setPassword(password:String) {
-        self.password = password
-    }
-    func setError(error:String) {
-        self.error = error
-    }
     
 }

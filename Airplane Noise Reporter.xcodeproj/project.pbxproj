@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C94E0A6E1B67662C004C8105 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C94E0A6D1B67662C004C8105 /* CoreLocation.framework */; };
 		C964D79D1B6559B400D691C5 /* LocationArray.plist in Resources */ = {isa = PBXBuildFile; fileRef = C964D79C1B6559B400D691C5 /* LocationArray.plist */; };
 		C964D7A11B657CE200D691C5 /* HamburgerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7A01B657CE200D691C5 /* HamburgerButton.swift */; };
 		C964D7A31B657E2200D691C5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C964D7A21B657E2200D691C5 /* Main.storyboard */; };
@@ -19,6 +20,9 @@
 		C964D7B91B659DBC00D691C5 /* LocationShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C964D7B71B659DBC00D691C5 /* LocationShareModel.m */; };
 		C964D7BD1B659F3000D691C5 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C964D7BC1B659F3000D691C5 /* MapKit.framework */; };
 		C964D7BF1B65AA3500D691C5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7BE1B65AA3500D691C5 /* SettingsViewController.swift */; };
+		C964D7C71B65F6A600D691C5 /* SendMailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7C61B65F6A600D691C5 /* SendMailViewController.swift */; };
+		C964D7C91B65FD5400D691C5 /* Airplane.swift in Sources */ = {isa = PBXBuildFile; fileRef = C964D7C81B65FD5400D691C5 /* Airplane.swift */; };
+		C964D7CB1B66080300D691C5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C964D7CA1B66080300D691C5 /* MessageUI.framework */; };
 		C98DB7121B64327C00AE7991 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7111B64327C00AE7991 /* AppDelegate.swift */; };
 		C98DB7151B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C98DB7131B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld */; };
 		C98DB71C1B64327C00AE7991 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C98DB71B1B64327C00AE7991 /* Images.xcassets */; };
@@ -42,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C94E0A6D1B67662C004C8105 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C964D79C1B6559B400D691C5 /* LocationArray.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = LocationArray.plist; sourceTree = "<group>"; };
 		C964D7A01B657CE200D691C5 /* HamburgerButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerButton.swift; sourceTree = "<group>"; };
 		C964D7A21B657E2200D691C5 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -58,6 +63,9 @@
 		C964D7B71B659DBC00D691C5 /* LocationShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationShareModel.m; sourceTree = "<group>"; };
 		C964D7BC1B659F3000D691C5 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C964D7BE1B65AA3500D691C5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		C964D7C61B65F6A600D691C5 /* SendMailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SendMailViewController.swift; sourceTree = "<group>"; };
+		C964D7C81B65FD5400D691C5 /* Airplane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Airplane.swift; sourceTree = "<group>"; };
+		C964D7CA1B66080300D691C5 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		C98DB70C1B64327C00AE7991 /* Airplane Noise Reporter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Airplane Noise Reporter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98DB7101B64327C00AE7991 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C98DB7111B64327C00AE7991 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +87,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C94E0A6E1B67662C004C8105 /* CoreLocation.framework in Frameworks */,
+				C964D7CB1B66080300D691C5 /* MessageUI.framework in Frameworks */,
 				C964D7BD1B659F3000D691C5 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +127,7 @@
 		C964D7C21B65F05200D691C5 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C964D7C61B65F6A600D691C5 /* SendMailViewController.swift */,
 				C964D7A41B657EE200D691C5 /* LoginViewController.swift */,
 				C964D7A51B657EE200D691C5 /* SignupViewController.swift */,
 				C98DB73A1B64357A00AE7991 /* MapViewController.swift */,
@@ -149,6 +160,7 @@
 			children = (
 				C98DB7341B64333900AE7991 /* AirplaneNoiseApi.swift */,
 				C964D7AC1B657F2D00D691C5 /* AirplaneNoiseUser.swift */,
+				C964D7C81B65FD5400D691C5 /* Airplane.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -156,6 +168,8 @@
 		C98DB7031B64327C00AE7991 = {
 			isa = PBXGroup;
 			children = (
+				C94E0A6D1B67662C004C8105 /* CoreLocation.framework */,
+				C964D7CA1B66080300D691C5 /* MessageUI.framework */,
 				C964D7BC1B659F3000D691C5 /* MapKit.framework */,
 				C98DB70E1B64327C00AE7991 /* Airplane Noise Reporter */,
 				C98DB7271B64327C00AE7991 /* Airplane Noise ReporterTests */,
@@ -339,10 +353,12 @@
 				C964D7B91B659DBC00D691C5 /* LocationShareModel.m in Sources */,
 				C98DB7151B64327C00AE7991 /* Airplane_Noise_Reporter.xcdatamodeld in Sources */,
 				C964D7AD1B657F2D00D691C5 /* AirplaneNoiseUser.swift in Sources */,
+				C964D7C71B65F6A600D691C5 /* SendMailViewController.swift in Sources */,
 				C98DB73B1B64357A00AE7991 /* MapViewController.swift in Sources */,
 				C98DB73D1B64376200AE7991 /* MapAnnotation.swift in Sources */,
 				C964D7A71B657EE200D691C5 /* LoginViewController.swift in Sources */,
 				C964D7A11B657CE200D691C5 /* HamburgerButton.swift in Sources */,
+				C964D7C91B65FD5400D691C5 /* Airplane.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

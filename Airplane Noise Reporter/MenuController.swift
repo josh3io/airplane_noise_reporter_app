@@ -31,11 +31,11 @@ class MenuController: UITableViewController {
         println("do segue")
         if (segue.identifier == "goto_logout") {
             println("goto_logout")
-            let destinationVC = segue.destinationViewController.childViewControllers.first as MapViewController
-            destinationVC.setDoLogoutOnLoad(true)
+            let destinationVC = segue.destinationViewController.childViewControllers.first as! MapViewController
+            destinationVC.doLogoutOnLoad = true
         } else if (segue.identifier == "goto_settings") {
             println("goto_settings")
-            let destinationVC = segue.destinationViewController as SettingsViewController
+            let destinationVC = segue.destinationViewController as! SettingsViewController
         }
     }
 

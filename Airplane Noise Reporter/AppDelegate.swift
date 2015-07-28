@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         getLocationManager()
         
         println("location unrestricted")
-        let locKey = launchOptions?[UIApplicationLaunchOptionsLocationKey] as UILocalNotification!
+        let locKey = launchOptions?[UIApplicationLaunchOptionsLocationKey] as! UILocalNotification!
         if (locKey != nil) {
             println("starting locationManager")
             self.shareModel.afterResume = true
@@ -65,13 +65,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let payload: AnyObject? = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey];
         if ((payload) != nil) {
             println("launching for notification")
-            handleRemoteNotification(payload as NSDictionary,applicationState:"launch")
+            handleRemoteNotification(payload as! NSDictionary,applicationState:"launch")
         }
         println("done application")
         return true
     }
     
-    func application(application:UIApplication, didReceiveRemoteNotification payload:NSDictionary) {
+    func application(application:UIApplication, didReceiveRemoteNotification payload:[NSObject:AnyObject]) {
         println("didReceiveRemoteNotification")
         if (application.applicationState == UIApplicationState.Inactive) {
             handleRemoteNotification(payload,applicationState:"inactive")
@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
     
     func handleRemoteNotification(payload:NSDictionary, applicationState:String) -> Void{
-        var str:String = payload.objectForKey("aps") as String!
+        var str:String = payload.objectForKey("aps") as! String!
         println("got notification")
         var alert = UIAlertController(title:"",message:str, preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title:"OK",style:UIAlertActionStyle.Default,handler:nil))
@@ -107,8 +107,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
     }
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [CLLocation]) {
-        for newLoc:CLLocation in locations {
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]) {
+        for obj in locations {
+            let newLoc:CLLocation = obj as! CLLocation
             let theLoc:CLLocationCoordinate2D = newLoc.coordinate
             let theAcc:CLLocationAccuracy = newLoc.horizontalAccuracy
             
@@ -175,7 +176,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.threeio.Hugzer" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as NSURL
+        return urls[urls.count-1] as! NSURL
         }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
@@ -198,7 +199,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureReasonErrorKey] = failureReason
             dict[NSUnderlyingErrorKey] = error
-            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict as [NSObject : AnyObject])
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             NSLog("Unresolved error \(error), \(error!.userInfo)")
@@ -256,16 +257,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let plistName:NSString = "LocationArray.plist"
         let paths:NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         
-        let docDir:NSString = paths.objectAtIndex(0) as NSString
+        let docDir:NSString = paths.objectAtIndex(0) as! NSString
         
         let fileManager = NSFileManager.defaultManager()
         
-        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName)
-        if (!(fileManager.fileExistsAtPath(fullPath))) {
+        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName as String)
+        if (!(fileManager.fileExistsAtPath(fullPath as String))) {
             println("creating file \(fullPath)")
             var bundle:NSString = NSBundle.mainBundle().pathForResource("LocationArray", ofType: "plist")!
             var err:NSError?
-            fileManager.copyItemAtPath(bundle, toPath: fullPath, error: &err)
+            fileManager.copyItemAtPath(bundle as String, toPath: fullPath as String, error: &err)
             if ((err) != nil) {
                 println("error creating file: \(err?.description)")
             } else {
@@ -274,8 +275,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         
-        var myDict = NSDictionary(contentsOfFile: fullPath)
-        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as NSMutableDictionary
+        var myDict = NSDictionary(contentsOfFile: fullPath as String)
+        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as! NSMutableDictionary
         
         if savedProfile.count > 0 {
             
@@ -290,7 +291,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             savedProfile.setObject(self.shareModel.myLocationArrayInPlist!, forKey: "LocationArray")
         }
         
-        if (!savedProfile.writeToFile(fullPath, atomically: false)) {
+        if (!savedProfile.writeToFile(fullPath as String, atomically: false)) {
             NSLog("Couldn't save LocationArray.plist for resume location")
         }
         self.doApiUpdateLocation()
@@ -332,16 +333,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let plistName:NSString = "LocationArray.plist"
         let paths:NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         
-        let docDir:NSString = paths.objectAtIndex(0) as NSString
+        let docDir:NSString = paths.objectAtIndex(0) as! NSString
         
         let fileManager = NSFileManager.defaultManager()
         
-        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName)
-        if (!(fileManager.fileExistsAtPath(fullPath))) {
+        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName as String)
+        if (!(fileManager.fileExistsAtPath(fullPath as String))) {
             println("creating file \(fullPath)")
             var bundle:NSString = NSBundle.mainBundle().pathForResource("LocationArray", ofType: "plist")!
             var err:NSError?
-            fileManager.copyItemAtPath(bundle, toPath: fullPath, error: &err)
+            fileManager.copyItemAtPath(bundle as String, toPath: fullPath as String, error: &err)
             if ((err) != nil) {
                 println("error creating file: \(err?.description)")
             } else {
@@ -350,8 +351,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         
-        var myDict = NSDictionary(contentsOfFile: fullPath)
-        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as NSMutableDictionary
+        var myDict = NSDictionary(contentsOfFile: fullPath as String)
+        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as! NSMutableDictionary
         
         if savedProfile.count > 0 {
             
@@ -366,7 +367,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             savedProfile.setObject(self.shareModel.myLocationArrayInPlist!, forKey: "LocationArray")
         }
         
-        if (!savedProfile.writeToFile(fullPath, atomically: false)) {
+        if (!savedProfile.writeToFile(fullPath as String, atomically: false)) {
             NSLog("Couldn't save LocationArray.plist for location")
         }
         self.doApiUpdateLocation()
@@ -416,16 +417,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         let plistName:NSString = "LocationArray.plist"
         let paths:NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         
-        let docDir:NSString = paths.objectAtIndex(0) as NSString
+        let docDir:NSString = paths.objectAtIndex(0) as! NSString
         
         let fileManager = NSFileManager.defaultManager()
         
-        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName)
-        if (!(fileManager.fileExistsAtPath(fullPath))) {
+        let fullPath:NSString = docDir.stringByAppendingPathComponent(plistName as String)
+        if (!(fileManager.fileExistsAtPath(fullPath as String))) {
             println("creating file \(fullPath)")
             var bundle:NSString = NSBundle.mainBundle().pathForResource("LocationArray", ofType: "plist")!
             var err:NSError?
-            fileManager.copyItemAtPath(bundle, toPath: fullPath, error: &err)
+            fileManager.copyItemAtPath(bundle as String, toPath: fullPath as String, error: &err)
             if ((err) != nil) {
                 println("error creating file: \(err?.description)")
             } else {
@@ -434,8 +435,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
         
         
-        var myDict = NSDictionary(contentsOfFile: fullPath)
-        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as NSMutableDictionary
+        var myDict = NSDictionary(contentsOfFile: fullPath as String)
+        var savedProfile:NSMutableDictionary = myDict?.mutableCopy() as! NSMutableDictionary
         
         if savedProfile.count > 0 {
             
@@ -452,7 +453,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             println("failed to set LocationArray object")
         }
         
-        if (!(savedProfile.writeToFile(fullPath, atomically: false))) {
+        if (!(savedProfile.writeToFile(fullPath as String, atomically: false))) {
             NSLog("Couldn't save LocationArray.plist for status; file \(fullPath)")
         }
         

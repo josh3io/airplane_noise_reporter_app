@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
     var myAPI:AirplaneNoiseApi
     
     required init(coder aDecoder: NSCoder) {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.myAPI = appDelegate.airplaneNoiseApi
         super.init(coder: aDecoder)
     }

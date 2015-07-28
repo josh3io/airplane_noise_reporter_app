@@ -28,7 +28,7 @@ class MapAnnotation : NSObject, MKAnnotation
         view.enabled = true
         view.canShowCallout = true
         view.image = UIImage(named: "rsz_plane.png")
-        
+        view.rightCalloutAccessoryView = UIButton.buttonWithType(.InfoDark) as! UIButton
         
         return view
     }

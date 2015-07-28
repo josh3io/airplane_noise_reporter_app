@@ -9,12 +9,13 @@
 import Foundation
 
 struct _URL_STRINGS {
-    private static var BaseUrlString:NSString = "http://192.168.1.125:8441"
-    private static var AirplaneFeedUrl:NSString = BaseUrlString + "/"
-    private static var ApnUrlString:NSString = BaseUrlString + "/apn"
-    private static var LoginUrlString:NSString = BaseUrlString + "/login"
-    private static var LogoutUrlString:NSString = BaseUrlString + "/logout"
-    private static var SignupUrlString:NSString = BaseUrlString + "/local-reg"
+    private static var BaseUrlString:String = "http://73.222.37.42"
+    private static var AirplaneFeedUrl:String = BaseUrlString + "/"
+    private static var ApnUrlString:String = BaseUrlString + "/apn"
+    private static var LoginUrlString:String = BaseUrlString + "/login"
+    private static var LogoutUrlString:String = BaseUrlString + "/logout"
+    private static var SignupUrlString:String = BaseUrlString + "/local-reg"
+    private static var LogUrlString:String = BaseUrlString + "/log"
 
 }
 
@@ -25,17 +26,21 @@ struct URLS {
     static var Login:NSURL = NSURL(string: _URL_STRINGS.LoginUrlString)!
     static var Logout:NSURL = NSURL(string: _URL_STRINGS.LogoutUrlString)!
     static var Signup:NSURL = NSURL(string: _URL_STRINGS.SignupUrlString)!
+    static var Log:NSURL = NSURL(string: _URL_STRINGS.LogUrlString)!
 }
 
 class AirplaneNoiseApi : NSObject
 {
     var session:NSURLSession
     var user:AirplaneNoiseUser
+    var selectedPlane:Airplane!
     
     override init() {
         user = AirplaneNoiseUser()
         session = NSURLSession.sharedSession()
     }
+    
+   
     
     func postreq(url:NSURL,formdata:NSString) -> NSMutableURLRequest {
         let request = NSMutableURLRequest(URL: url)
@@ -60,11 +65,12 @@ class AirplaneNoiseApi : NSObject
     }
     
     
-    func signup(username:NSString,password:NSString,email:NSString,gender:NSString,year:NSString,month:NSString,day:NSString,callback:((AirplaneNoiseUser) -> ())) -> Void {
+    func signup(username:String,password:String,email:String,gender:String,year:String,month:String,day:String,callback:((AirplaneNoiseUser) -> ())) -> Void {
         
-        let formdata = "username="+username+"&password="+password+"&email="+email+"&gender="+gender+"&year="+year+"&month="+month+"&day="+day
+        let formdata = "username="+username+"&password="+password;
+        let formdata2 = formdata+"&email="+email+"&gender="+gender+"&year="+year+"&month="+month+"&day="+day
         
-        let request = postreq(URLS.Signup,formdata:formdata)
+        let request = postreq(URLS.Signup,formdata:formdata2)
         
         
         let task = session.dataTaskWithRequest(request,completionHandler: {data,response,error -> Void in
@@ -82,10 +88,10 @@ class AirplaneNoiseApi : NSObject
             if (json == nil || json["user"] == nil || json["user"]["username"] == nil) {
                 println("signup failed")
             } else {
-                self.user.setUsername(json["user"]["username"].string!)
-                self.user.setPassword(password)
+                self.user.username=json["user"]["username"].string!
+                self.user.password=password
             }
-            println("username "+self.user.username)
+            println("username \(self.user.username)")
             
             callback(self.user)
             return
@@ -93,8 +99,19 @@ class AirplaneNoiseApi : NSObject
         task.resume()
     }
     
+    
+    func logComplaint(email:String) -> Void
+    {
+        let request = postreq(URLS.Log, formdata:"email="+email)
+        let task = session.dataTaskWithRequest(request,completionHandler: {data,response,error -> Void in
+            println("log posted")
+        })
+        task.resume()
+    }
+    
+    
     func login(username:NSString,password:NSString, callback: ((AirplaneNoiseUser) -> ())) -> Void {
-        let request = postreq(URLS.Login,formdata:"username=" + username + "&password=" + password)
+        let request = postreq(URLS.Login,formdata:"username=" + (username as String) + "&password=" + (password as String))
         
         
         let task = session.dataTaskWithRequest(request, completionHandler: {data,response, error -> Void in
@@ -112,10 +129,10 @@ class AirplaneNoiseApi : NSObject
                 println("login failed")
             } else {
                 
-                self.user.setUsername(json["user"]["username"].string!)
-                self.user.setPassword(password)
+                self.user.username=json["user"]["username"].string!
+                self.user.password=password
             }
-            println("username "+self.user.username)
+            println("username \(self.user.username)")
             
             callback(self.user)
             return
@@ -134,8 +151,8 @@ class AirplaneNoiseApi : NSObject
                 return
             }
             
-            self.user.setUsername("")
-            self.user.setPassword("")
+            self.user.username=""
+            self.user.password=""
             callback(true)
         })
         task.resume()
@@ -151,7 +168,6 @@ class AirplaneNoiseApi : NSObject
         })
         task.resume()
     }
-    
     
     func initLocation(message:String) -> Void {
         /*

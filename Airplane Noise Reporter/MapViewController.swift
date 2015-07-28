@@ -24,6 +24,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     var markers = []
     
+    var airplanes = [String:Airplane]()
+    
     var locationManager:CLLocationManager = CLLocationManager()
     var doLogoutOnLoad:Bool = false
     var doShowLogin:Bool = false
@@ -36,7 +38,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var shareMessageTextField:UITextField?
     
     required init(coder aDecoder: NSCoder) {
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.myAPI = appDelegate.airplaneNoiseApi
         println("map view init\n")
         self.locationManager.requestWhenInUseAuthorization()
@@ -71,10 +73,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             initialZoomComplete = true
         }
     }
-    
-    func setDoLogoutOnLoad(set:Bool) {
-        self.doLogoutOnLoad = set
-    }
+   
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let id:String = segue.identifier! as String
@@ -94,10 +93,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         } else {
             let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             let isLoggedIn:Int = prefs.integerForKey("ISLOGGEDIN") as Int
-            let username:NSString = prefs.valueForKey("USERNAME") as NSString
+            let username:NSString = prefs.valueForKey("USERNAME") as! NSString
             println("loggedin \(isLoggedIn); username \(username)")
             
-            let shareState:Bool = (prefs.valueForKey("SHARESTATE") ?? false) as Bool
+            let shareState:Bool = (prefs.valueForKey("SHARESTATE") ?? false) as! Bool
             
             if (!self.updateTimer.valid) {
                 self.doUpdateMapFromApi()
@@ -125,8 +124,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.doShowLogin = true
         } else {
             println("no need to do login")
-            let username:NSString = prefs.valueForKey("USERNAME") as NSString
-            let password:NSString = prefs.valueForKey("PASSWORD") as NSString
+            let username:NSString = prefs.valueForKey("USERNAME") as! NSString
+            let password:NSString = prefs.valueForKey("PASSWORD") as! NSString
             
             
             myAPI.login(username, password:password, callback: {user -> Void in })
@@ -170,7 +169,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         if (annotation.isKindOfClass(MapAnnotation)) {
-            var anno:MapAnnotation = annotation as MapAnnotation
+            var anno:MapAnnotation = annotation as! MapAnnotation
             var annoView = mapView.dequeueReusableAnnotationViewWithIdentifier("MapAnnotationView")
             
             if (annoView == nil) {
@@ -181,11 +180,27 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 println("got a reusable view")
                 annoView.annotation = anno
             }
+            myAPI.selectedPlane = airplanes[anno.title]!
             return annoView
         } else {
             return nil
         }
     }
+    
+    func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+        if control == annotationView.rightCalloutAccessoryView {
+            println("goto mail")
+            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            var setViewController = mainStoryboard.instantiateViewControllerWithIdentifier("SendMailView") as! SendMailViewController
+            var rootViewController = appDelegate.window!.rootViewController
+            rootViewController?.presentViewController(setViewController, animated: false, completion: nil)
+
+        }
+    }
+
     
     
     func doProcessJSONLocations(data:JSON) {
@@ -195,6 +210,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         let numLon = NSNumber(double: self.location.latitude as Double)
         let stLon:String = numLon.stringValue
         
+        var tmpAirplanes = [String:Airplane]()
         var newMarkers:[MapAnnotation] = []
         for (index:String, plane:JSON) in data["list"] {
             let hexIdent = plane["hexIdent"].stringValue
@@ -203,12 +219,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let lat = plane["lat"].doubleValue
             let lon = plane["lon"].doubleValue
             
+            var a = Airplane(hexIdent:hexIdent,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
+            
             var newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexIdent, subtitle: altitude+" @ "+groundSpeed)
             newMarkers.append(newMarker)
         }
         
         if (newMarkers.count > 0) {
-            self.mapView.removeAnnotations(self.markers)
+            airplanes = tmpAirplanes
+            
+            self.mapView.removeAnnotations(self.markers as [AnyObject])
             self.mapView.addAnnotations(newMarkers)
         }
         self.doingUpdateMapFromApi = false
@@ -237,11 +257,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]) {
     
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [CLLocation]) {
-        //println("map location manager didUpdateLocations")
-        let delegate = UIApplication.sharedApplication().delegate as AppDelegate
-        for newLoc:CLLocation in locations {
+            //println("map location manager didUpdateLocations")
+        let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        for obj in locations  {
+            let newLoc = obj as! CLLocation
             let theLoc:CLLocationCoordinate2D = newLoc.coordinate
             let theAcc:CLLocationAccuracy = newLoc.horizontalAccuracy
             
