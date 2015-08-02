@@ -189,6 +189,7 @@
 		C98DB70E1B64327C00AE7991 /* Airplane Noise Reporter */ = {
 			isa = PBXGroup;
 			children = (
+				C964D7A21B657E2200D691C5 /* Main.storyboard */,
 				C964D7C51B65F08900D691C5 /* API */,
 				C964D7C41B65F07400D691C5 /* Utility */,
 				C964D7C31B65F06600D691C5 /* Map */,
@@ -196,7 +197,6 @@
 				C964D7B31B659DAE00D691C5 /* LocationAppDelegate */,
 				C964D7AE1B6581CA00D691C5 /* SWRevealViewController */,
 				C964D7A61B657EE200D691C5 /* MenuController.swift */,
-				C964D7A21B657E2200D691C5 /* Main.storyboard */,
 				C98DB7111B64327C00AE7991 /* AppDelegate.swift */,
 				C98DB71B1B64327C00AE7991 /* Images.xcassets */,
 				C98DB71D1B64327C00AE7991 /* LaunchScreen.xib */,

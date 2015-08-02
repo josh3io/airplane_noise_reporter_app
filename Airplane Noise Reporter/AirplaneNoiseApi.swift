@@ -9,7 +9,7 @@
 import Foundation
 
 struct _URL_STRINGS {
-    private static var BaseUrlString:String = "http://73.222.37.42"
+    private static var BaseUrlString:String = "http://scnoisereport.cloudapp.net:8080"
     private static var AirplaneFeedUrl:String = BaseUrlString + "/"
     private static var ApnUrlString:String = BaseUrlString + "/apn"
     private static var LoginUrlString:String = BaseUrlString + "/login"
@@ -34,6 +34,7 @@ class AirplaneNoiseApi : NSObject
     var session:NSURLSession
     var user:AirplaneNoiseUser
     var selectedPlane:Airplane!
+    var airplanes:[String:Airplane] = [String:Airplane]()
     
     override init() {
         user = AirplaneNoiseUser()

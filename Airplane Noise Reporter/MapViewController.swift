@@ -22,7 +22,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     var location:CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     
-    var markers = []
+    var markers = [MapAnnotation]()
+    var markersLookup = [String:MapAnnotation]()
     
     var airplanes = [String:Airplane]()
     
@@ -31,11 +32,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var doShowLogin:Bool = false
     
     var initialZoomComplete:Bool = false
+    var initialCenterComplete:Bool = false
     
     var updateTimer:NSTimer = NSTimer()
-    var doingUpdateMapFromApi:Bool = false
+    var doingUpdateMapFromApi:Double = 0
+    
+    var doingMapChange = false
     
     var shareMessageTextField:UITextField?
+    
+    var reportHexId:String = ""
     
     required init(coder aDecoder: NSCoder) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -73,13 +79,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             initialZoomComplete = true
         }
     }
-   
+    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let id:String = segue.identifier! as String
         if (id == "goto_login") {
             //let destVC = segue.destinationViewController as LoginViewController
             //destVC.doLogout = true
+        } else if (id == "showSendReport") {
+            let destVC = segue.destinationViewController as! SendMailViewController
+            destVC.thePlane = airplanes[reportHexId]
         }
     }
     
@@ -100,7 +109,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             if (!self.updateTimer.valid) {
                 self.doUpdateMapFromApi()
-                self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
+                self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
             }
             
             
@@ -146,7 +155,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         
         self.doUpdateMapFromApi()
-        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(30, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -156,14 +165,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
     
     func doUpdateMapFromApi() {
-        if (!self.doingUpdateMapFromApi) {
-            self.doingUpdateMapFromApi = true
-            
-            
-            myAPI.getAirplaneFeed(doProcessJSONLocations)
-        } else {
-            println("already updating map locations")
-        }
+        myAPI.getAirplaneFeed(doProcessJSONLocations)
     }
     
     
@@ -180,7 +182,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 println("got a reusable view")
                 annoView.annotation = anno
             }
-            myAPI.selectedPlane = airplanes[anno.title]!
+            //myAPI.selectedPlane = airplanes[anno.title]
             return annoView
         } else {
             return nil
@@ -191,55 +193,190 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         if control == annotationView.rightCalloutAccessoryView {
             println("goto mail")
-            let mainStoryboard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            
-            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            var setViewController = mainStoryboard.instantiateViewControllerWithIdentifier("SendMailView") as! SendMailViewController
-            var rootViewController = appDelegate.window!.rootViewController
-            rootViewController?.presentViewController(setViewController, animated: false, completion: nil)
-
+            reportHexId = annotationView.annotation.title!
+            self.performSegueWithIdentifier("showSendReport", sender: self)
         }
     }
-
     
     
     func doProcessJSONLocations(data:JSON) {
+        let now:Double = NSDate().timeIntervalSince1970
         let numLat = NSNumber(double: self.location.latitude as Double)
         let stLat:String = numLat.stringValue
         
         let numLon = NSNumber(double: self.location.latitude as Double)
         let stLon:String = numLon.stringValue
         
-        var tmpAirplanes = [String:Airplane]()
-        var newMarkers:[MapAnnotation] = []
+        var airplaneInNewList = [String:Bool]()
         for (index:String, plane:JSON) in data["list"] {
-            let hexIdent = plane["hexIdent"].stringValue
+            let hexId:String = plane["hexIdent"].stringValue
+            
+            airplaneInNewList[hexId] = true
+            
+            println("process plane \(hexId)")
             let altitude = plane["altitude"].stringValue
             let groundSpeed = plane["groundSpeed"].stringValue
             let lat = plane["lat"].doubleValue
             let lon = plane["lon"].doubleValue
             
-            var a = Airplane(hexIdent:hexIdent,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
-            
-            var newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexIdent, subtitle: altitude+" @ "+groundSpeed)
-            newMarkers.append(newMarker)
+            if (airplanes[hexId] != nil) {
+                // update existing plane
+                println("update plane \(hexId)")
+                airplanes[hexId]!.altitude = altitude
+                airplanes[hexId]!.groundSpeed = groundSpeed
+                airplanes[hexId]!.lat = lat
+                airplanes[hexId]!.lon = lon
+                airplanes[hexId]!.updateTime = now
+            } else {
+                println("add plane \(hexId)")
+                airplanes[hexId] = Airplane(hexIdent:hexId,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
+            }
         }
         
-        if (newMarkers.count > 0) {
-            airplanes = tmpAirplanes
+        var markerExists = [String:Bool]()
+        for (hexId:String,anno:MapAnnotation) in markersLookup {
+            if (airplaneInNewList[hexId] == nil) {
+                // not in data set; remove it
+                println("not in data set, remove \(hexId)")
+                airplanes.removeValueForKey(hexId)
+                mapView.removeAnnotation(markersLookup[hexId])
+                markersLookup.removeValueForKey(hexId)
+                markerExists[hexId] = false
+            } else if (airplanes[hexId] != nil) {
+                if (markersLookup[hexId]!.updateTime <= airplanes[hexId]!.updateTime) {
+                    println("update marker coords \(hexId)")
+                    markersLookup[hexId]!.updateTime = airplanes[hexId]!.updateTime
+                    markersLookup[hexId]!.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon))
+                    markerExists[hexId] = true
+                    
+                } else if (markersLookup[hexId]!.updateTime < now - 300) {
+                    // too old, remove it
+                    println("too old, remove marker \(hexId)")
+                    mapView.removeAnnotation(markersLookup[hexId])
+                    markersLookup.removeValueForKey(hexId)
+                    markerExists[hexId] = false
+                } else {
+                    // skip because the marker is newer than the record from JSON
+                    println("skip \(hexId)")
+                    markerExists[hexId] = true
+                    
+                }
+            } else {
+                // we don't know about the airplane for some reason?
+                println("skip unknown marker \(hexId)")
+                println("removing found marker without matching plane: \(hexId)")
+                mapView.removeAnnotation(markersLookup[hexId])
+                markersLookup.removeValueForKey(hexId)
+                markerExists[hexId] = false
+            }
             
-            self.mapView.removeAnnotations(self.markers as [AnyObject])
-            self.mapView.addAnnotations(newMarkers)
         }
-        self.doingUpdateMapFromApi = false
+        for (hexId:String, plane:Airplane) in airplanes {
+            if (markerExists[hexId] == nil) {
+                // new marker because we didn't find one in the existing markersLookup set
+                println("need a new marker for \(hexId)")
+                let lat = airplanes[hexId]!.lat
+                let lon = airplanes[hexId]!.lon
+                let groundSpeed = airplanes[hexId]!.groundSpeed
+                let altitude = airplanes[hexId]!.altitude
+                
+                let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexId, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:now)
+                mapView.addAnnotation(newMarker)
+                markersLookup[hexId] = newMarker
+            }
+        }
+        myAPI.airplanes = airplanes
+    }
+    
+    func doProcessJSONLocationsOld(data:JSON) {
+        let numLat = NSNumber(double: self.location.latitude as Double)
+        let stLat:String = numLat.stringValue
+        
+        let numLon = NSNumber(double: self.location.latitude as Double)
+        let stLon:String = numLon.stringValue
+        
+        var newMarkers:[MapAnnotation] = []
+        var newIdents = [String:Bool]()
+        var minNow:Double = 9999999999
+        if (self.doingUpdateMapFromApi == 0) {
+            self.doingUpdateMapFromApi = NSDate().timeIntervalSince1970
+            for (index:String, plane:JSON) in data["list"] {
+                if (plane["lastUpdateTimestamp"].doubleValue > self.doingUpdateMapFromApi - 120) {
+                    println("json plane "+plane["hexIdent"].stringValue)
+                    
+                    let hexIdent = plane["hexIdent"].stringValue
+                    let altitude = plane["altitude"].stringValue
+                    let groundSpeed = plane["groundSpeed"].stringValue
+                    let lat = plane["lat"].doubleValue
+                    let lon = plane["lon"].doubleValue
+                    
+                    var a = Airplane(hexIdent:hexIdent,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
+                    
+                    let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexIdent, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:plane["lastUpdateTimestamp"].doubleValue)
+                    
+                    newMarkers.append(newMarker)
+                    newIdents[hexIdent] = true
+                }
+            }
+        }
+        print("newMarkers count \(newMarkers.count)")
+        var oldIdents = [String:Bool]()
+        var markers = [MapAnnotation]()
+        let now:Double = NSDate().timeIntervalSince1970
+        for (anno:MapAnnotation) in self.markers {
+            if (anno.view?.highlighted == true) {
+                oldIdents[anno.title] = true
+            }
+            else if (anno.getUpdateTime() < now - 300) {
+                println("remove old by expiry for \(anno.title)")
+                self.mapView.removeAnnotation(anno)
+                oldIdents[anno.title] = false
+            }
+            else if (newIdents[anno.title] != nil) {
+                println("remove old for \(anno.title)")
+                self.mapView.removeAnnotation(anno)
+                oldIdents[anno.title] = false
+            }
+            else if (oldIdents[anno.title] != true) {
+                oldIdents[anno.title] = true
+                markers.append(anno)
+            }
+        }
+        for (anno:MapAnnotation) in newMarkers {
+            if (oldIdents[anno.title] != true) {
+                println("add new for \(anno.title)")
+                markers.append(anno)
+            }
+        }
+        self.mapView.addAnnotations(newMarkers)
+        self.markers = markers
+        
+        if (!doingMapChange) {
+            var center:CLLocationCoordinate2D  = self.mapView.centerCoordinate
+            var forceChange:CLLocationCoordinate2D = CLLocationCoordinate2DMake(center.latitude-1,center.longitude-1)
+            self.mapView.centerCoordinate = forceChange
+            self.mapView.centerCoordinate = center
+        }
         
         
+        self.doingUpdateMapFromApi = 0
+        println("unset doingUpdateMapFromApi")
+        
+        
+    }
+    
+    func mapView(mapView:MKMapView, regionDidChangeAnimated animated:Bool) {
+        doingMapChange = false
+    }
+    func mapView(mapView:MKMapView, regionWillChangeAnimated animated:Bool) {
+        doingMapChange = true
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateTimer.invalidate()
         initialZoomComplete = false
+        initialCenterComplete = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -258,15 +395,18 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]) {
-    
-            //println("map location manager didUpdateLocations")
+        
+        //println("map location manager didUpdateLocations")
         let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
         for obj in locations  {
-            let newLoc = obj as! CLLocation
-            let theLoc:CLLocationCoordinate2D = newLoc.coordinate
-            let theAcc:CLLocationAccuracy = newLoc.horizontalAccuracy
-            
-            self.location = theLoc
+            if (!initialCenterComplete) {
+                let newLoc = obj as! CLLocation
+                let theLoc:CLLocationCoordinate2D = newLoc.coordinate
+                let theAcc:CLLocationAccuracy = newLoc.horizontalAccuracy
+                
+                self.location = theLoc
+                initialCenterComplete = true
+            }
             
         }
     }

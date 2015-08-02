@@ -13,6 +13,15 @@ import MessageUI
 class SendMailViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     var myAPI:AirplaneNoiseApi
+    
+    @IBOutlet weak var reps_list:UITextView!
+    @IBOutlet weak var msg_body:UITextView!
+    @IBOutlet weak var plane_info:UITextView!
+    @IBOutlet weak var signature:UITextField!
+    @IBOutlet weak var name_and_address:UITextView!
+    
+    var thePlane:Airplane?
+    
 
     required init(coder aDecoder:NSCoder) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -21,6 +30,8 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         super.init(coder:aDecoder)
     }
     override func viewDidLoad() {
+        
+        
         super.viewDidLoad()
     }
     

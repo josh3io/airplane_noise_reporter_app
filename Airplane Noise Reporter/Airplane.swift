@@ -14,6 +14,7 @@ class Airplane :NSObject {
     var groundSpeed:String
     var lat:Double
     var lon:Double
+    var updateTime:Double
     
     init(hexIdent h:String, altitude a:String, groundSpeed g:String, lat:Double, lon:Double) {
         hexIdent = h
@@ -21,6 +22,7 @@ class Airplane :NSObject {
         groundSpeed = g
         self.lat = lat
         self.lon = lon
+        updateTime = NSDate().timeIntervalSince1970
     }
     
 }
