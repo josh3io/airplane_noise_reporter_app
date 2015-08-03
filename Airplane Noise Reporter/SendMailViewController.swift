@@ -22,10 +22,10 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     var thePlane:Airplane?
     var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-
+    
     required init(coder aDecoder:NSCoder) {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-
+        
         self.myAPI = appDelegate.airplaneNoiseApi
         super.init(coder:aDecoder)
     }
@@ -38,7 +38,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         
         super.viewDidLoad()
     }
-   
+    
     func buildRepsList() -> Void {
         reps_list.text = "reps go here"
     }
@@ -50,11 +50,11 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
             str = prefs.stringForKey("BODY")!
         } else {
             str = "To whom it may concern,\n\n "
-            + "One issue of great concern to me is the increased level of airplane noise in my area. \n"
-            + "I am writing to you today to bring a particular incident to you attention.  \n"
-            + "At \(timestamp), I was disturbed by the noise level of the flight detailed below.\n"
-            + "I hope this information is helpful in guiding your policy decisions regarding quality of life\n"
-            + "for your constituents.\n\n"
+                + "One issue of great concern to me is the increased level of airplane noise in my area. \n"
+                + "I am writing to you today to bring a particular incident to you attention.  \n"
+                + "At \(timestamp), I was disturbed by the noise level of the flight detailed below.\n"
+                + "I hope this information is helpful in guiding your policy decisions regarding quality of life\n"
+                + "for your constituents.\n\n"
         }
         msg_body.text = str;
         return str;
@@ -160,22 +160,26 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
     
     // MARK: MFMailComposeViewControllerDelegate Method
     func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+        controller.dismissViewControllerAnimated(true, completion: nil)
+        
         switch result.value {
             
         case MFMailComposeResultCancelled.value:
             println("Mail Cancelled")
+            break
         case MFMailComposeResultSaved.value:
             println("Mail Saved")
+            break
         case MFMailComposeResultSent.value:
             println("Mail Sent")
             self.performSegueWithIdentifier("cancelSendReport", sender: self)
-            return
+            break
         case MFMailComposeResultFailed.value:
             println("Mail Failed")
+            break
         default:
             break
             
         }
-        controller.dismissViewControllerAnimated(true, completion: nil)
     }
 }
