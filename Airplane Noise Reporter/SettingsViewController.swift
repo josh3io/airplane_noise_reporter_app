@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
     
     var myAPI:AirplaneNoiseApi
     
@@ -25,16 +25,16 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     var currentPicker:Array<String>
     var currentTitle:String
     var currentRow:Int = 0
-    var usHouseSetting = ""
-    var caSenateSetting = ""
-    var caAssemblySetting = ""
     
     @IBOutlet weak var pickerView: UIPickerView!
     @IBOutlet weak var houseLabel: UILabel!
     @IBOutlet weak var senateLabel: UILabel!
     @IBOutlet weak var assemblyLabel: UILabel!
     
+    @IBOutlet weak var nameAndAddress: UITextView!
+    
     @IBOutlet weak var pickerViewView:UIView!
+    
     
     
     
@@ -50,13 +50,15 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     
     func loadPrefs() {
         let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
-        usHouseSetting = prefs.stringForKey("US_HOUSE") ?? "<- Click to choose"
-        caSenateSetting = prefs.stringForKey("CA_SENATE") ?? "<- Click to choose"
-        caAssemblySetting = prefs.stringForKey("CA_ASSEMBLY") ?? "<- Click to choose"
-        
+        let usHouseSetting = prefs.stringForKey("US_HOUSE") ?? "<- Click to choose"
+        let caSenateSetting = prefs.stringForKey("CA_SENATE") ?? "<- Click to choose"
+        let caAssemblySetting = prefs.stringForKey("CA_ASSEMBLY") ?? "<- Click to choose"
+        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name and address here"
+    
         houseLabel.text = usHouseSetting
         senateLabel.text = caSenateSetting
         assemblyLabel.text = caAssemblySetting
+        nameAndAddress.text = nameAndAddressSetting
     }
     
   
@@ -64,10 +66,19 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         
         loadPrefs()
         
+        nameAndAddress.layer.borderWidth = 5.0
+        nameAndAddress.layer.borderColor = UIColor.grayColor().CGColor
+        nameAndAddress.layer.cornerRadius = 8
+        
         super.viewDidLoad()
         
     }
     
+    func textViewDidChange(textView: UITextView) {
+        println("textivew did change: \(textView.text)")
+        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        prefs.setObject(textView.text, forKey: "NAME_AND_ADDRESS")
+    }
     
     @IBAction func houseButtonTapped(sender:UIButton!) {
         println("house tapped")

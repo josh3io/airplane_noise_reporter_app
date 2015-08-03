@@ -70,16 +70,36 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(mapView: MKMapView!, didUpdateUserLocation userLocation: MKUserLocation!) {
         mapView.centerCoordinate = userLocation.location.coordinate
+        println("mapView didUpdateUserLocation, initialZoomComplete: \(initialZoomComplete)")
         if (initialZoomComplete == false) {
             let userLocation = mapView.userLocation
-            let region = MKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 75000, 75000)
-            let adjustedRegion = mapView.regionThatFits(region)
-            mapView.setRegion(adjustedRegion, animated: true)
-            
-            initialZoomComplete = true
+            if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
+                
+                let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 75000, 75000)
+                let adjustedRegion = mapView.regionThatFits(region)
+                mapView.setRegion(adjustedRegion, animated: true)
+                
+                initialZoomComplete = true
+            }
         }
     }
     
+    func checkInitialZoom() -> Void {
+        //println("check initial zoom \(initialZoomComplete) loc \(mapView.userLocation)")
+        if ( mapView.userLocation != nil && initialZoomComplete == false) {
+            
+            let userLocation = mapView.userLocation
+            println("userLocation coordinate \(userLocation.coordinate.latitude),\(userLocation.coordinate.longitude)")
+            if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
+                let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 75000, 75000)
+                let adjustedRegion = mapView.regionThatFits(region)
+                mapView.setRegion(adjustedRegion, animated: true)
+                
+                initialZoomComplete = true
+            }
+        }
+        
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let id:String = segue.identifier! as String
@@ -96,7 +116,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         println("mapview did appear")
         if self.doShowLogin {
             self.doShowLogin = false
-            
+            println("need to login")
             
             self.performSegueWithIdentifier("goto_login", sender: self)
         } else {
@@ -111,11 +131,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.doUpdateMapFromApi()
                 self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
             }
-            
-            
-            
+
+            checkInitialZoom()
         }
     }
+    
+    
     override func viewDidLoad() {
         println("mapview did load")
         super.viewDidLoad()
@@ -175,11 +196,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             var annoView = mapView.dequeueReusableAnnotationViewWithIdentifier("MapAnnotationView")
             
             if (annoView == nil) {
-                println("new annotationView")
+                //println("new annotationView")
                 annoView = anno.annotationView()
                 return annoView
             } else {
-                println("got a reusable view")
+                //println("got a reusable view")
                 annoView.annotation = anno
             }
             //myAPI.selectedPlane = airplanes[anno.title]
@@ -200,6 +221,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     
     func doProcessJSONLocations(data:JSON) {
+        checkInitialZoom()
         let now:Double = NSDate().timeIntervalSince1970
         let numLat = NSNumber(double: self.location.latitude as Double)
         let stLat:String = numLat.stringValue
@@ -213,23 +235,25 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             
             airplaneInNewList[hexId] = true
             
-            println("process plane \(hexId)")
+            //println("process plane \(hexId)")
             let altitude = plane["altitude"].stringValue
             let groundSpeed = plane["groundSpeed"].stringValue
             let lat = plane["lat"].doubleValue
             let lon = plane["lon"].doubleValue
+            let track = plane["track"].doubleValue
             
             if (airplanes[hexId] != nil) {
                 // update existing plane
-                println("update plane \(hexId)")
+                //println("update plane \(hexId)")
                 airplanes[hexId]!.altitude = altitude
                 airplanes[hexId]!.groundSpeed = groundSpeed
                 airplanes[hexId]!.lat = lat
                 airplanes[hexId]!.lon = lon
+                airplanes[hexId]!.track = track
                 airplanes[hexId]!.updateTime = now
             } else {
-                println("add plane \(hexId)")
-                airplanes[hexId] = Airplane(hexIdent:hexId,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
+                //println("add plane \(hexId)")
+                airplanes[hexId] = Airplane(hexIdent:hexId,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon,track:track)
             }
         }
         
@@ -237,27 +261,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         for (hexId:String,anno:MapAnnotation) in markersLookup {
             if (airplaneInNewList[hexId] == nil) {
                 // not in data set; remove it
-                println("not in data set, remove \(hexId)")
+                println("not in data set, remove \(hexId): \(anno)")
+                
+                mapView.removeAnnotation(anno)
+                
                 airplanes.removeValueForKey(hexId)
-                mapView.removeAnnotation(markersLookup[hexId])
                 markersLookup.removeValueForKey(hexId)
                 markerExists[hexId] = false
+                
             } else if (airplanes[hexId] != nil) {
-                if (markersLookup[hexId]!.updateTime <= airplanes[hexId]!.updateTime) {
-                    println("update marker coords \(hexId)")
-                    markersLookup[hexId]!.updateTime = airplanes[hexId]!.updateTime
-                    markersLookup[hexId]!.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon))
+                if (anno.updateTime <= airplanes[hexId]!.updateTime) {
+                    //println("update marker coords \(hexId)")
+                    anno.updateTime = airplanes[hexId]!.updateTime
+                    anno.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon),track:airplanes[hexId]!.track)
                     markerExists[hexId] = true
                     
                 } else if (markersLookup[hexId]!.updateTime < now - 300) {
                     // too old, remove it
                     println("too old, remove marker \(hexId)")
-                    mapView.removeAnnotation(markersLookup[hexId])
+                    mapView.removeAnnotation(anno)
                     markersLookup.removeValueForKey(hexId)
                     markerExists[hexId] = false
                 } else {
                     // skip because the marker is newer than the record from JSON
-                    println("skip \(hexId)")
+                    //println("skip \(hexId)")
                     markerExists[hexId] = true
                     
                 }
@@ -265,7 +292,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 // we don't know about the airplane for some reason?
                 println("skip unknown marker \(hexId)")
                 println("removing found marker without matching plane: \(hexId)")
-                mapView.removeAnnotation(markersLookup[hexId])
+                mapView.removeAnnotation(anno)
                 markersLookup.removeValueForKey(hexId)
                 markerExists[hexId] = false
             }
@@ -274,13 +301,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         for (hexId:String, plane:Airplane) in airplanes {
             if (markerExists[hexId] == nil) {
                 // new marker because we didn't find one in the existing markersLookup set
-                println("need a new marker for \(hexId)")
+                //println("need a new marker for \(hexId)")
                 let lat = airplanes[hexId]!.lat
                 let lon = airplanes[hexId]!.lon
                 let groundSpeed = airplanes[hexId]!.groundSpeed
                 let altitude = airplanes[hexId]!.altitude
+                let track = airplanes[hexId]!.track
                 
-                let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexId, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:now)
+                let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexId, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:now, track:track)
                 mapView.addAnnotation(newMarker)
                 markersLookup[hexId] = newMarker
             }
@@ -310,9 +338,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                     let lat = plane["lat"].doubleValue
                     let lon = plane["lon"].doubleValue
                     
-                    var a = Airplane(hexIdent:hexIdent,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon)
+                    var a = Airplane(hexIdent:hexIdent,altitude:altitude,groundSpeed:groundSpeed,lat:lat,lon:lon,track:0)
                     
-                    let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexIdent, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:plane["lastUpdateTimestamp"].doubleValue)
+                    let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexIdent, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:plane["lastUpdateTimestamp"].doubleValue,track:0)
                     
                     newMarkers.append(newMarker)
                     newIdents[hexIdent] = true

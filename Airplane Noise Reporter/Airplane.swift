@@ -15,13 +15,15 @@ class Airplane :NSObject {
     var lat:Double
     var lon:Double
     var updateTime:Double
+    var track:Double
     
-    init(hexIdent h:String, altitude a:String, groundSpeed g:String, lat:Double, lon:Double) {
+    init(hexIdent h:String, altitude a:String, groundSpeed g:String, lat:Double, lon:Double, track:Double) {
         hexIdent = h
         altitude = a
         groundSpeed = g
         self.lat = lat
         self.lon = lon
+        self.track = track
         updateTime = NSDate().timeIntervalSince1970
     }
     

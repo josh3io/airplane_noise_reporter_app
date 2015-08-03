@@ -75,7 +75,7 @@
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xkj-jI-BtU">
                                         <rect key="frame" x="44" y="103" width="487" height="132"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
+                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <connections>
@@ -122,7 +122,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="custom" identifier="cancelSendReport" customClass="SWRevealViewControllerSeguePushController" id="ImT-dq-txR"/>
+                                    <segue destination="K8v-It-Hc5" kind="custom" identifier="cancelSendReport" customClass="SWRevealViewControllerSeguePushController" id="rD0-Yp-gTi"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMI-68-L6d">
@@ -275,8 +275,29 @@
                                 <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <size key="shadowOffset" width="1" height="1"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="houseLabel" text="&lt;-- click to choose" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwp-3Q-Kzn">
+                                <rect key="frame" x="197" y="174" width="145" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter your name and address:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8p-hE-qOm">
+                                <rect key="frame" x="16" y="284" width="231" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rOB-oC-Cju">
+                                <rect key="frame" x="255" y="284" width="329" height="79"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <connections>
+                                    <outlet property="delegate" destination="AtH-2H-GRX" id="EII-6s-RQR"/>
+                                </connections>
+                            </textView>
                             <view hidden="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="saV-6Z-4QY">
-                                <rect key="frame" x="16" y="338" width="568" height="205"/>
+                                <rect key="frame" x="16" y="395" width="568" height="205"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="05A-Sp-g3U">
                                         <rect key="frame" x="8" y="-3" width="48" height="30"/>
@@ -317,12 +338,6 @@
                                     <constraint firstAttribute="bottom" secondItem="1mi-yC-56h" secondAttribute="bottom" constant="8" id="uI0-BG-XAk"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" restorationIdentifier="houseLabel" text="&lt;-- click to choose" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xwp-3Q-Kzn">
-                                <rect key="frame" x="197" y="174" width="145" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -334,6 +349,7 @@
                     <connections>
                         <outlet property="assemblyLabel" destination="SnD-UD-qpB" id="nKN-6w-d8y"/>
                         <outlet property="houseLabel" destination="xwp-3Q-Kzn" id="IwL-MH-lV7"/>
+                        <outlet property="nameAndAddress" destination="rOB-oC-Cju" id="q8v-yv-Pu7"/>
                         <outlet property="pickerView" destination="1mi-yC-56h" id="3QH-cU-Kyc"/>
                         <outlet property="pickerViewView" destination="saV-6Z-4QY" id="jL5-oL-3fK"/>
                         <outlet property="senateLabel" destination="Gvz-1d-4CN" id="4aC-Lv-YYj"/>
@@ -487,19 +503,6 @@
                                     <action selector="submitButton:" destination="oWV-kG-0Gc" eventType="touchUpInside" id="Zl6-Zl-Tjc"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Gender" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HCG-kv-SLG">
-                                <rect key="frame" x="207" y="208" width="199" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="genderFieldTouch:" destination="oWV-kG-0Gc" eventType="touchUpInside" id="txh-Q3-6SK"/>
-                                </connections>
-                            </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Birthday" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PwY-xO-SiP">
-                                <rect key="frame" x="207" y="246" width="199" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YZV-J3-dp1">
                                 <rect key="frame" x="240" y="335" width="132" height="30"/>
                                 <state key="normal" title="Already signed up?">
@@ -516,9 +519,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="bdayField" destination="PwY-xO-SiP" id="5GB-Z9-4jw"/>
                         <outlet property="emailField" destination="d6D-ZU-yGe" id="bzw-AQ-jsi"/>
-                        <outlet property="genderField" destination="HCG-kv-SLG" id="5fx-ke-FPC"/>
                         <outlet property="password2Field" destination="7GF-L9-coA" id="HUK-1w-jBp"/>
                         <outlet property="passwordField" destination="c97-yE-3Yn" id="uPm-OD-wjc"/>
                         <outlet property="usernameField" destination="3Nl-bx-8a8" id="BHj-bB-R4r"/>
@@ -672,8 +673,8 @@
         <image name="menu" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="wrv-QU-z0v"/>
-        <segue reference="ImT-dq-txR"/>
-        <segue reference="aOq-ui-IPm"/>
+        <segue reference="TQ3-77-Svy"/>
+        <segue reference="rD0-Yp-gTi"/>
+        <segue reference="AZb-Pd-NhH"/>
     </inferredMetricsTieBreakers>
 </document>

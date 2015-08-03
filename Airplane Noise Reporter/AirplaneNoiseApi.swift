@@ -51,7 +51,7 @@ class AirplaneNoiseApi : NSObject
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.HTTPBody = formdata.dataUsingEncoding(NSUTF8StringEncoding)
         
-        println("postreq \(url) with data \(formdata)")
+        //println("postreq \(url) with data \(formdata)")
         
         return request;
     }
@@ -60,7 +60,7 @@ class AirplaneNoiseApi : NSObject
         request.HTTPMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
-        println("getreq \(url)")
+        //println("getreq \(url)")
         
         return request;
     }
