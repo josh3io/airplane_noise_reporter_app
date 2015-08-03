@@ -15,11 +15,11 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     var myAPI:AirplaneNoiseApi
     
     let _us_house = ["District 18","District 20"]
-    let _us_house_emails = ["josh+ushouse18@3io.com","josh+ushouse20@3io.com"]
+    let _us_house_emails = ["CA18AEima@mail.house.gov","WebformsCA20@mail.house.gov"]
     let _ca_senate = ["District 17","District 13","District 15"]
-    let _ca_senate_emails = ["josh+casenate17@3io.com","josh+casenate13@3io.com","josh+casenate15@3io.com"]
+    let _ca_senate_emails = ["senator.monning@senate.ca.gov","senator.hill@senate.ca.gov","senator.beall@senate.ca.gov"]
     let _ca_assembly = ["District 29","District 28"]
-    let _ca_assembly_emails = ["josh+assy29@3io.com","josh+assy28@3io.com"]
+    let _ca_assembly_emails = ["assemblymember.stone@assembly.ca.gov","assemblymember.low@assembly.ca.gov"]
     let titles = ["US House","CA Senate","CA Assembly"]
     
     var currentPicker:Array<String>

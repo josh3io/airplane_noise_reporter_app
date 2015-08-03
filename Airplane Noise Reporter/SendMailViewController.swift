@@ -99,12 +99,12 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
     func getRepsEmailsList() -> [AnyObject] {
         var emails:[AnyObject] = [String]()
         
-        // TODO: uncomment for production
-        /*
+        emails.append("sfo.noise@flysfo.com")
+        
         emails.append("senator@boxer.senate.gov")
         emails.append("senator@feinstein.senate.gov")
         emails.append("governor@governor.ca.gov")
-        */
+        
         if (prefs.stringForKey("US_HOUSE_EMAIL") != nil) {
             emails.append(prefs.stringForKey("US_HOUSE_EMAIL")!)
         }
