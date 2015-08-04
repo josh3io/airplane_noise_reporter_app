@@ -54,6 +54,7 @@ class MapAnnotation : NSObject, MKAnnotation
         } else {
             realTrack = track - 90
         }
+        println("\(title) data track \(track) rotate image by \(realTrack)")
         let rotatedImage:UIImage = rotateImageByDegrees(planeIcon!, degrees: realTrack)
         view.image = rotatedImage
         
@@ -80,6 +81,8 @@ class MapAnnotation : NSObject, MKAnnotation
         let transform:CGAffineTransform = CGAffineTransformMakeRotation(radians)
         viewBox.transform = transform
         let rotatedSize:CGSize = viewBox.frame.size
+        
+        println("\(title) heading \(degrees) radians \(radians)")
         
         UIGraphicsBeginImageContextWithOptions(rotatedSize, false, UIScreen.mainScreen().scale)
         var bitmap:CGContextRef = UIGraphicsGetCurrentContext()

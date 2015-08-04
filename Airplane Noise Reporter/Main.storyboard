@@ -213,7 +213,7 @@
                                     <outlet property="delegate" destination="AtH-2H-GRX" id="EII-6s-RQR"/>
                                 </connections>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1a-qz-WN7">
+                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z1a-qz-WN7">
                                 <rect key="frame" x="267" y="260" width="67" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <state key="normal" title="Done">
@@ -221,6 +221,7 @@
                                 </state>
                                 <connections>
                                     <action selector="doneButtonTapped:" destination="AtH-2H-GRX" eventType="touchUpInside" id="ePV-St-JEp"/>
+                                    <segue destination="K8v-It-Hc5" kind="custom" identifier="goto_map" customClass="SWRevealViewControllerSeguePushController" id="3Kv-US-CEO"/>
                                 </connections>
                             </button>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bid-AY-6mK">
@@ -229,9 +230,12 @@
                                     <navigationItem title="Title" id="I5d-AU-ln2"/>
                                 </items>
                             </navigationBar>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLf-OJ-J2K">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLf-OJ-J2K">
                                 <rect key="frame" x="16" y="291" width="568" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="Nd1-8G-I9g"/>
+                                </constraints>
                                 <string key="text">100% privacy is our policy - none of your personal information is sent to our servers. Your information is kept only on your device unless you choose to send to the FAA when you make a noise complaint.  If you use your full name and address they are more likely to respect your email.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -239,13 +243,18 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="SLf-OJ-J2K" firstAttribute="top" secondItem="z1a-qz-WN7" secondAttribute="bottom" constant="1" id="0WX-ey-S2y"/>
                             <constraint firstItem="B8p-hE-qOm" firstAttribute="top" secondItem="bid-AY-6mK" secondAttribute="bottom" constant="16" id="33S-Ge-Wb5"/>
+                            <constraint firstItem="SLf-OJ-J2K" firstAttribute="trailing" secondItem="M73-H5-tVG" secondAttribute="trailingMargin" id="3ZU-9i-UuQ"/>
                             <constraint firstItem="B8p-hE-qOm" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="F09-Ap-YOm"/>
+                            <constraint firstAttribute="centerX" secondItem="SLf-OJ-J2K" secondAttribute="centerX" id="Fdm-Uz-7fe"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="trailing" secondItem="M73-H5-tVG" secondAttribute="trailingMargin" id="IZx-oC-vX6"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leading" id="KTZ-3N-0IL"/>
                             <constraint firstItem="z1a-qz-WN7" firstAttribute="top" secondItem="rOB-oC-Cju" secondAttribute="bottom" constant="8" symbolic="YES" id="TrE-oc-kYQ"/>
+                            <constraint firstItem="SLf-OJ-J2K" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="dDt-JS-4JE"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="top" secondItem="B8p-hE-qOm" secondAttribute="bottom" constant="15" id="fKo-Y3-hH6"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="top" secondItem="M73-H5-tVG" secondAttribute="top" id="fZH-s0-znD"/>
+                            <constraint firstItem="lA3-7X-J6G" firstAttribute="top" secondItem="SLf-OJ-J2K" secondAttribute="bottom" constant="181" id="jJk-Zt-TVU"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="centerX" secondItem="rOB-oC-Cju" secondAttribute="centerX" id="nk0-VF-7Xi"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="xvT-kA-YSQ"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="centerX" secondItem="z1a-qz-WN7" secondAttribute="centerX" id="xxN-r5-Sko"/>
@@ -253,12 +262,11 @@
                     </view>
                     <connections>
                         <outlet property="nameAndAddress" destination="rOB-oC-Cju" id="q8v-yv-Pu7"/>
-                        <segue destination="BYZ-38-t0r" kind="custom" identifier="goto_map" customClass="SWRevealViewControllerSeguePushController" id="TQ3-77-Svy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbY-96-LTC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="284" y="1073"/>
+            <point key="canvasLocation" x="473" y="1170"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="LV5-aj-XBF">
@@ -865,8 +873,8 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="E0N-MM-2n5"/>
-        <segue reference="XsR-xa-6Kw"/>
-        <segue reference="TQ3-77-Svy"/>
+        <segue reference="3Kv-US-CEO"/>
+        <segue reference="SMA-Pu-tZw"/>
         <segue reference="aOq-ui-IPm"/>
     </inferredMetricsTieBreakers>
 </document>

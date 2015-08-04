@@ -44,9 +44,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.addApplicationStatusToPList("didFinishLaunchingWithOptions")
         
         println("continue loading")
+        /*
         application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes:(UIUserNotificationType.Sound|UIUserNotificationType.Alert|UIUserNotificationType.Badge), categories: nil))
         application.registerForRemoteNotifications()
-        
+        */
         getLocationManager()
         
         println("location unrestricted")
