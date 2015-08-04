@@ -173,7 +173,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
             println("Mail Saved")
             break
         case MFMailComposeResultSent.value:
-            myApi.logComplaint(thePlane)
+            myAPI.logComplaint(thePlane!)
             println("Mail Sent")
             
             break
