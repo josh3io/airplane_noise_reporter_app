@@ -101,9 +101,17 @@ class AirplaneNoiseApi : NSObject
     }
     
     
-    func logComplaint(email:String) -> Void
+    func logComplaint(thePlane:Airplane) -> Void
     {
-        let request = postreq(URLS.Log, formdata:"email="+email)
+        let str = "hexIdent=\(thePlane.hexIdent)&"
+            + "altitude=\(thePlane.altitude)&";
+        let str2 = str
+            + "groundspeed=\(thePlane.groundSpeed)&"
+            + "heading=\(thePlane.track)&"
+            + "lat=\(thePlane.lat)&"
+            + "lon=\(thePlane.lon)"
+
+        let request = postreq(URLS.Log, formdata:str2)
         let task = session.dataTaskWithRequest(request,completionHandler: {data,response,error -> Void in
             println("log posted")
         })

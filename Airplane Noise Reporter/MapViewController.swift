@@ -103,7 +103,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let id:String = segue.identifier! as String
-        if (id == "goto_login") {
+        if (id == "goto_settings") {
             //let destVC = segue.destinationViewController as LoginViewController
             //destVC.doLogout = true
         } else if (id == "showSendReport") {
@@ -118,12 +118,12 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.doShowLogin = false
             println("need to login")
             
-            self.performSegueWithIdentifier("goto_login", sender: self)
+            self.performSegueWithIdentifier("goto_settings", sender: self)
         } else {
             let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
             let isLoggedIn:Int = prefs.integerForKey("ISLOGGEDIN") as Int
-            let username:NSString = prefs.valueForKey("USERNAME") as! NSString
-            println("loggedin \(isLoggedIn); username \(username)")
+            //let username:NSString = prefs.valueForKey("USERNAME") as! NSString
+            //println("loggedin \(isLoggedIn); username \(username)")
             
             let shareState:Bool = (prefs.valueForKey("SHARESTATE") ?? false) as! Bool
             
@@ -154,11 +154,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             self.doShowLogin = true
         } else {
             println("no need to do login")
-            let username:NSString = prefs.valueForKey("USERNAME") as! NSString
-            let password:NSString = prefs.valueForKey("PASSWORD") as! NSString
+            //let username:NSString = prefs.valueForKey("USERNAME") as! NSString
+            //let password:NSString = prefs.valueForKey("PASSWORD") as! NSString
             
             
-            myAPI.login(username, password:password, callback: {user -> Void in })
+            //myAPI.login(username, password:password, callback: {user -> Void in })
         }
         
         if self.revealViewController() != nil {

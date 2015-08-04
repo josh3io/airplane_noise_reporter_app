@@ -37,6 +37,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         buildNameAndAddress()
         
         super.viewDidLoad()
+        sendEmailButtonTapped(self)
     }
     
     func buildRepsList() -> Void {
@@ -100,7 +101,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         var emails:[AnyObject] = [String]()
         
         emails.append("sfo.noise@flysfo.com")
-        
+        /*
         emails.append("senator@boxer.senate.gov")
         emails.append("senator@feinstein.senate.gov")
         emails.append("governor@governor.ca.gov")
@@ -114,7 +115,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         if (prefs.stringForKey("CA_ASSEMBLY_EMAIL") != nil) {
             emails.append(prefs.stringForKey("CA_ASSEMBLY_EMAIL")!)
         }
-        
+        */
         
         return emails;
     }
@@ -124,6 +125,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         mailComposeViewController.setToRecipients(getRepsEmailsList())
         mailComposeViewController.setSubject("Airplane Noise Report")
         mailComposeViewController.setMessageBody(composeMessageFromUIElements(), isHTML: false)
+        
         if MFMailComposeViewController.canSendMail() {
             self.presentViewController(mailComposeViewController, animated: true, completion: nil)
         } else {
@@ -171,8 +173,9 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
             println("Mail Saved")
             break
         case MFMailComposeResultSent.value:
+            myApi.logComplaint(thePlane)
             println("Mail Sent")
-            self.performSegueWithIdentifier("cancelSendReport", sender: self)
+            
             break
         case MFMailComposeResultFailed.value:
             println("Mail Failed")
@@ -181,5 +184,6 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
             break
             
         }
+        self.performSegueWithIdentifier("cancelSendReport", sender: self)
     }
 }

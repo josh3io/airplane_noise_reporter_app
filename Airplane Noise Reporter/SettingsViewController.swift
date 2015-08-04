@@ -22,8 +22,8 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     let _ca_assembly_emails = ["assemblymember.stone@assembly.ca.gov","assemblymember.low@assembly.ca.gov"]
     let titles = ["US House","CA Senate","CA Assembly"]
     
-    var currentPicker:Array<String>
-    var currentTitle:String
+    var currentPicker:Array<String> = []
+    var currentTitle:String = ""
     var currentRow:Int = 0
     
     @IBOutlet weak var pickerView: UIPickerView!
@@ -42,22 +42,25 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         self.myAPI = appDelegate.airplaneNoiseApi
         println("settings init\n")
-        currentPicker = _us_house
-        currentTitle = titles[0]
+        //currentPicker = _us_house
+        //currentTitle = titles[0]
         super.init(coder: aDecoder)
         
     }
     
     func loadPrefs() {
         let prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        /*
         let usHouseSetting = prefs.stringForKey("US_HOUSE") ?? "<- Click to choose"
         let caSenateSetting = prefs.stringForKey("CA_SENATE") ?? "<- Click to choose"
         let caAssemblySetting = prefs.stringForKey("CA_ASSEMBLY") ?? "<- Click to choose"
-        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name and address here"
-    
+        
         houseLabel.text = usHouseSetting
         senateLabel.text = caSenateSetting
         assemblyLabel.text = caAssemblySetting
+        */
+
+        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name and address here"
         nameAndAddress.text = nameAndAddressSetting
     }
     
@@ -106,8 +109,17 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
     }
     @IBAction func doneButtonTapped(sender:UIButton!) {
         println("done")
+        
+        if (nameAndAddress.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+            var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            prefs.setInteger(1,forKey:"ISLOGGEDIN")
+            prefs.synchronize()
+            self.performSegueWithIdentifier("goto_map", sender: self)
+        }
+        
+        /*
         pickerViewView.hidden = true
-        var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        
         if (currentPicker == _us_house) {
             houseLabel.text = _us_house[currentRow]
             prefs.setObject(_us_house[currentRow],forKey:"US_HOUSE")
@@ -121,7 +133,9 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
             prefs.setObject(_ca_assembly[currentRow],forKey:"CA_ASSEMBLY")
             prefs.setObject(_ca_assembly_emails[currentRow],forKey:"CA_ASSEMBLY_EMAIL")
         }
+
         prefs.synchronize()
+        */
         currentRow = 0
     }
     
