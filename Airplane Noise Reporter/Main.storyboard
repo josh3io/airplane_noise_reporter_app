@@ -64,13 +64,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Send Report" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SUY-Dl-TJP">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Send Report" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SUY-Dl-TJP">
                                 <rect key="frame" x="252" y="20" width="97" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sc8-mz-R5s">
+                            <scrollView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sc8-mz-R5s">
                                 <rect key="frame" x="31" y="430" width="539" height="58"/>
                                 <subviews>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xkj-jI-BtU">
@@ -117,7 +117,7 @@
                                     </textView>
                                 </subviews>
                             </scrollView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5f-nq-uH3">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w5f-nq-uH3">
                                 <rect key="frame" x="233" y="562" width="134" height="30"/>
                                 <state key="normal" title="Cancel noise report">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -126,8 +126,12 @@
                                     <segue destination="K8v-It-Hc5" kind="custom" identifier="cancelSendReport" customClass="SWRevealViewControllerSeguePushController" id="rD0-Yp-gTi"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMI-68-L6d">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yMI-68-L6d">
                                 <rect key="frame" x="126" y="496" width="348" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="348" id="aa6-ie-oZ6"/>
+                                    <constraint firstAttribute="height" constant="30" id="m7C-X8-Ee4"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                 <state key="normal" title="Send your noise report">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -136,21 +140,33 @@
                                     <action selector="sendEmailButtonTapped:" destination="kqS-1n-FGK" eventType="touchUpInside" id="Lah-y9-p08"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Preparing email..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biH-ru-E8i">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preparing email..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biH-ru-E8i">
                                 <rect key="frame" x="233" y="118" width="134" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="xSQ-G6-fvw">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="xSQ-G6-fvw">
                                 <rect key="frame" x="290" y="175" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="SUY-Dl-TJP" firstAttribute="centerX" secondItem="yMI-68-L6d" secondAttribute="centerX" id="5WD-GJ-scV"/>
                             <constraint firstAttribute="centerX" secondItem="xSQ-G6-fvw" secondAttribute="centerX" id="AOs-pH-ksW"/>
+                            <constraint firstItem="yMI-68-L6d" firstAttribute="top" secondItem="Sc8-mz-R5s" secondAttribute="bottom" constant="8" id="BA2-Xu-I9R"/>
+                            <constraint firstItem="yMI-68-L6d" firstAttribute="centerX" secondItem="Sc8-mz-R5s" secondAttribute="centerX" id="EhM-O0-B4U"/>
+                            <constraint firstItem="xSQ-G6-fvw" firstAttribute="centerX" secondItem="Sc8-mz-R5s" secondAttribute="centerX" id="HXn-cC-D80"/>
+                            <constraint firstItem="xSQ-G6-fvw" firstAttribute="top" secondItem="biH-ru-E8i" secondAttribute="bottom" constant="36" id="KSp-qu-cAv"/>
                             <constraint firstItem="SUY-Dl-TJP" firstAttribute="top" secondItem="10B-iy-Ohc" secondAttribute="bottom" id="S1u-n2-MJc"/>
+                            <constraint firstItem="w5f-nq-uH3" firstAttribute="top" secondItem="yMI-68-L6d" secondAttribute="bottom" constant="36" id="Ti3-nj-zba"/>
+                            <constraint firstAttribute="bottom" secondItem="yMI-68-L6d" secondAttribute="bottom" constant="74" id="UKg-U3-zyd"/>
+                            <constraint firstItem="biH-ru-E8i" firstAttribute="top" secondItem="SUY-Dl-TJP" secondAttribute="bottom" constant="77" id="Zp9-36-tTk"/>
+                            <constraint firstItem="yMI-68-L6d" firstAttribute="top" secondItem="Sc8-mz-R5s" secondAttribute="bottom" constant="8" symbolic="YES" id="cko-y9-phy"/>
+                            <constraint firstItem="SUY-Dl-TJP" firstAttribute="centerX" secondItem="biH-ru-E8i" secondAttribute="centerX" id="esh-l9-B4t"/>
                             <constraint firstAttribute="centerX" secondItem="biH-ru-E8i" secondAttribute="centerX" id="fQZ-na-Uk4"/>
+                            <constraint firstItem="SUY-Dl-TJP" firstAttribute="centerX" secondItem="w5f-nq-uH3" secondAttribute="centerX" id="mYz-Gb-deJ"/>
+                            <constraint firstItem="SUY-Dl-TJP" firstAttribute="centerX" secondItem="Sc8-mz-R5s" secondAttribute="centerX" id="zuN-aq-XFR"/>
                         </constraints>
                     </view>
                     <connections>
@@ -195,12 +211,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your name and address:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8p-hE-qOm">
-                                <rect key="frame" x="16" y="60" width="231" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rOB-oC-Cju">
                                 <rect key="frame" x="16" y="96" width="568" height="156"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -230,31 +240,39 @@
                                     <navigationItem title="Title" id="I5d-AU-ln2"/>
                                 </items>
                             </navigationBar>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLf-OJ-J2K">
-                                <rect key="frame" x="16" y="291" width="568" height="128"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLf-OJ-J2K">
+                                <rect key="frame" x="16" y="291" width="568" height="309"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="Nd1-8G-I9g"/>
                                 </constraints>
-                                <string key="text">100% privacy is our policy - none of your personal information is sent to our servers. Your information is kept only on your device unless you choose to send to the FAA when you make a noise complaint.  If you use your full name and address they are more likely to respect your email.</string>
+                                <string key="text">100% privacy is our policy - none of your personal information is sent to our servers. Your information is kept only on your device unless you choose to send to the FAA when you make a noise complaint.  If you use your full name, address, and phone number, they are more likely to respect your email.  If you have a caller code from contacting the airport you can enter that here as well. </string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your name, address, and phone number:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B8p-hE-qOm">
+                                <rect key="frame" x="16" y="60" width="357" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="SLf-OJ-J2K" firstAttribute="top" secondItem="z1a-qz-WN7" secondAttribute="bottom" constant="1" id="0WX-ey-S2y"/>
                             <constraint firstItem="B8p-hE-qOm" firstAttribute="top" secondItem="bid-AY-6mK" secondAttribute="bottom" constant="16" id="33S-Ge-Wb5"/>
                             <constraint firstItem="SLf-OJ-J2K" firstAttribute="trailing" secondItem="M73-H5-tVG" secondAttribute="trailingMargin" id="3ZU-9i-UuQ"/>
+                            <constraint firstAttribute="centerX" secondItem="SLf-OJ-J2K" secondAttribute="centerX" id="4F5-EE-sH8"/>
                             <constraint firstItem="B8p-hE-qOm" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="F09-Ap-YOm"/>
                             <constraint firstAttribute="centerX" secondItem="SLf-OJ-J2K" secondAttribute="centerX" id="Fdm-Uz-7fe"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="trailing" secondItem="M73-H5-tVG" secondAttribute="trailingMargin" id="IZx-oC-vX6"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leading" id="KTZ-3N-0IL"/>
                             <constraint firstItem="z1a-qz-WN7" firstAttribute="top" secondItem="rOB-oC-Cju" secondAttribute="bottom" constant="8" symbolic="YES" id="TrE-oc-kYQ"/>
                             <constraint firstItem="SLf-OJ-J2K" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="dDt-JS-4JE"/>
+                            <constraint firstItem="SLf-OJ-J2K" firstAttribute="trailing" secondItem="M73-H5-tVG" secondAttribute="trailingMargin" id="eOf-eH-Dqg"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="top" secondItem="B8p-hE-qOm" secondAttribute="bottom" constant="15" id="fKo-Y3-hH6"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="top" secondItem="M73-H5-tVG" secondAttribute="top" id="fZH-s0-znD"/>
-                            <constraint firstItem="lA3-7X-J6G" firstAttribute="top" secondItem="SLf-OJ-J2K" secondAttribute="bottom" constant="181" id="jJk-Zt-TVU"/>
+                            <constraint firstItem="SLf-OJ-J2K" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="gg0-9V-xy2"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="centerX" secondItem="rOB-oC-Cju" secondAttribute="centerX" id="nk0-VF-7Xi"/>
                             <constraint firstItem="rOB-oC-Cju" firstAttribute="leading" secondItem="M73-H5-tVG" secondAttribute="leadingMargin" id="xvT-kA-YSQ"/>
                             <constraint firstItem="bid-AY-6mK" firstAttribute="centerX" secondItem="z1a-qz-WN7" secondAttribute="centerX" id="xxN-r5-Sko"/>
@@ -695,7 +713,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Enter your name and address:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IXs-eo-bnf">
                                 <rect key="frame" x="16" y="284" width="231" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tj5-X3-z6b">

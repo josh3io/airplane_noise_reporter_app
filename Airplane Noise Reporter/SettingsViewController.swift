@@ -60,7 +60,7 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         assemblyLabel.text = caAssemblySetting
         */
 
-        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name and address here"
+        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name\naddress1\nacity state, zip\nphone\nemail\ncaller code"
         nameAndAddress.text = nameAndAddressSetting
     }
     

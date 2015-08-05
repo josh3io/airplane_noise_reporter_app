@@ -50,12 +50,7 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         if (prefs.stringForKey("BODY") != nil) {
             str = prefs.stringForKey("BODY")!
         } else {
-            str = "To whom it may concern,\n\n "
-                + "One issue of great concern to me is the increased level of airplane noise in my area. \n"
-                + "I am writing to you today to bring a particular incident to you attention.  \n"
-                + "At \(timestamp), I was disturbed by the noise level of the flight detailed below.\n"
-                + "I hope this information is helpful in guiding your policy decisions regarding quality of life\n"
-                + "for your constituents.\n\n"
+            str = "To whom it may concern,\n\nAt \(timestamp), I was disturbed by the noise level of the flight detailed below.\n"
         }
         msg_body.text = str;
         return str;
