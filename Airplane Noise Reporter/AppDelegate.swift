@@ -44,58 +44,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.addApplicationStatusToPList("didFinishLaunchingWithOptions")
         
         println("continue loading")
-        /*
-        application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes:(UIUserNotificationType.Sound|UIUserNotificationType.Alert|UIUserNotificationType.Badge), categories: nil))
-        application.registerForRemoteNotifications()
-        */
+        
         getLocationManager()
         
-        println("location unrestricted")
-        let locKey = launchOptions?[UIApplicationLaunchOptionsLocationKey] as! UILocalNotification!
-        if (locKey != nil) {
-            println("starting locationManager")
-            self.shareModel.afterResume = true
-            getLocationManager()
-            self.addResumeLocationToPList()
-        } else {
-            println("locKey is nil")
-            self.shareModel.afterResume = false
-            self.addLocationToPList(false)
-        }
         
-        let payload: AnyObject? = launchOptions?[UIApplicationLaunchOptionsRemoteNotificationKey];
-        if ((payload) != nil) {
-            println("launching for notification")
-            handleRemoteNotification(payload as! NSDictionary,applicationState:"launch")
-        }
+        println("locKey is nil")
+        self.shareModel.afterResume = false
+        self.addLocationToPList(false)
+        
         println("done application")
         return true
     }
     
-    func application(application:UIApplication, didReceiveRemoteNotification payload:[NSObject:AnyObject]) {
-        println("didReceiveRemoteNotification")
-        if (application.applicationState == UIApplicationState.Inactive) {
-            handleRemoteNotification(payload,applicationState:"inactive")
-        } else if (application.applicationState == UIApplicationState.Active) {
-            handleRemoteNotification(payload,applicationState:"active");
-        }
-    }
     
-    func application(application:UIApplication, didRegisterForRemoteNotificationsWithDeviceToken device:NSData) {
-        println("my token is \(device)")
-        self.airplaneNoiseApi.setApnDevice("\(device)")
-    }
-    func application(application:UIApplication, didFailToRegisterForRemoteNotificationsWithDeviceToken error:NSError) {
-        println("failed to get token: \(error)")
-    }
-    
-    func handleRemoteNotification(payload:NSDictionary, applicationState:String) -> Void{
-        var str:String = payload.objectForKey("aps") as! String!
-        println("got notification")
-        var alert = UIAlertController(title:"",message:str, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title:"OK",style:UIAlertActionStyle.Default,handler:nil))
-        self.window?.rootViewController?.presentViewController(alert, animated: true, completion: nil)
-    }
     
     func stopSharingLocation() -> Void {
         self.shareModel.shareLocation = false

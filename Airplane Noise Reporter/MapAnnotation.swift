@@ -48,14 +48,9 @@ class MapAnnotation : NSObject, MKAnnotation
     
     func setViewImageForTrack(view:MKAnnotationView,track:Double) -> Void {
         //println("rotate icon to \(track) degrees")
-        var realTrack:Double;
-        if (track - 90 < 0) {
-            realTrack = 360 + (track - 90)
-        } else {
-            realTrack = track - 90
-        }
-        println("\(title) data track \(track) rotate image by \(realTrack)")
-        let rotatedImage:UIImage = rotateImageByDegrees(planeIcon!, degrees: realTrack)
+        
+        println("\(title) data track \(track)")
+        let rotatedImage:UIImage = rotateImageByDegrees(planeIcon!, degrees: track)
         view.image = rotatedImage
         
     }
@@ -65,13 +60,12 @@ class MapAnnotation : NSObject, MKAnnotation
         view.enabled = true
         view.canShowCallout = true
         
-        setViewImageForTrack(view,track:self.track)
+        //setViewImageForTrack(view,track:self.track)
         
         let image:UIImage = UIImage(named: "exclaimation point.png")!
         var theButton:UIButton = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size:image.size))
         theButton.setImage(image,forState:UIControlState.Normal);
         view.rightCalloutAccessoryView = theButton
-        //view.rightCalloutAccessoryView = UIButton.buttonWithType(.InfoDark) as! UIButton
         return view
     }
 

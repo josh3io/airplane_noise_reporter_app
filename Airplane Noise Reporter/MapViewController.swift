@@ -198,11 +198,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             if (annoView == nil) {
                 //println("new annotationView")
                 annoView = anno.annotationView()
-                return annoView
             } else {
                 //println("got a reusable view")
                 annoView.annotation = anno
             }
+            anno.setViewImageForTrack(annoView, track: anno.track)
             //myAPI.selectedPlane = airplanes[anno.title]
             return annoView
         } else {
@@ -271,7 +271,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
             } else if (airplanes[hexId] != nil) {
                 if (anno.updateTime <= airplanes[hexId]!.updateTime) {
-                    //println("update marker coords \(hexId)")
+                    println("update marker coords \(hexId) track \(airplanes[hexId]!.track)")
                     anno.updateTime = airplanes[hexId]!.updateTime
                     anno.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon),track:airplanes[hexId]!.track)
                     markerExists[hexId] = true
@@ -309,6 +309,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 let track = airplanes[hexId]!.track
                 
                 let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexId, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:now, track:track)
+                
                 mapView.addAnnotation(newMarker)
                 markersLookup[hexId] = newMarker
             }
