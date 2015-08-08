@@ -10,30 +10,20 @@ import Foundation
 import UIKit
 
 
-class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
+class SettingsViewController: UIViewController {
     
     var myAPI:AirplaneNoiseApi
     
-    let _us_house = ["District 18","District 20"]
-    let _us_house_emails = ["CA18AEima@mail.house.gov","WebformsCA20@mail.house.gov"]
-    let _ca_senate = ["District 17","District 13","District 15"]
-    let _ca_senate_emails = ["senator.monning@senate.ca.gov","senator.hill@senate.ca.gov","senator.beall@senate.ca.gov"]
-    let _ca_assembly = ["District 29","District 28"]
-    let _ca_assembly_emails = ["assemblymember.stone@assembly.ca.gov","assemblymember.low@assembly.ca.gov"]
-    let titles = ["US House","CA Senate","CA Assembly"]
+  
     
-    var currentPicker:Array<String> = []
-    var currentTitle:String = ""
-    var currentRow:Int = 0
+    @IBOutlet weak var name:UITextField!
+    @IBOutlet weak var address1:UITextField!
+    @IBOutlet weak var address2:UITextField!
+    @IBOutlet weak var city:UITextField!
+    @IBOutlet weak var zip:UITextField!
+    @IBOutlet weak var phone:UITextField!
     
-    @IBOutlet weak var pickerView: UIPickerView!
-    @IBOutlet weak var houseLabel: UILabel!
-    @IBOutlet weak var senateLabel: UILabel!
-    @IBOutlet weak var assemblyLabel: UILabel!
-    
-    @IBOutlet weak var nameAndAddress: UITextView!
-    
-    @IBOutlet weak var pickerViewView:UIView!
+    @IBOutlet weak var error:UILabel!
     
     
     
@@ -60,104 +50,75 @@ class SettingsViewController: UIViewController, UIPickerViewDataSource, UIPicker
         assemblyLabel.text = caAssemblySetting
         */
 
-        let nameAndAddressSetting = prefs.stringForKey("NAME_AND_ADDRESS") ?? "name\naddress1\nacity state, zip\nphone\nemail\ncaller code"
-        nameAndAddress.text = nameAndAddressSetting
+        name.text = prefs.stringForKey("NAME_KEY") ?? ""
+        address1.text = prefs.stringForKey("ADDRESS1_KEY") ?? ""
+        address2.text = prefs.stringForKey("ADDRESS2_KEY") ?? ""
+        city.text = prefs.stringForKey("CITY_KEY") ?? ""
+        zip.text = prefs.stringForKey("ZIP_KEY") ?? ""
+        phone.text = prefs.stringForKey("PHONE_KEY") ?? ""
+
     }
     
   
     override func viewDidLoad() {
         
         loadPrefs()
-        
+
+        /*
         nameAndAddress.layer.borderWidth = 5.0
         nameAndAddress.layer.borderColor = UIColor.grayColor().CGColor
         nameAndAddress.layer.cornerRadius = 8
+        */
         
         super.viewDidLoad()
         
     }
-    
+
+    /*
     func textViewDidChange(textView: UITextView) {
         println("textivew did change: \(textView.text)")
         var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
         prefs.setObject(textView.text, forKey: "NAME_AND_ADDRESS")
     }
+    */
     
-    @IBAction func houseButtonTapped(sender:UIButton!) {
-        println("house tapped")
-        currentPicker = _us_house
-        pickerView.reloadAllComponents()
-        pickerViewView.hidden = false;
-    }
-    @IBAction func senateButtonTapped(sender:UIButton!) {
-        println("senate tapped")
-        currentPicker = _ca_senate
-        pickerView.reloadAllComponents()
-        pickerViewView.hidden = false;
-    }
-    @IBAction func assemblyButtonTapped(sender:UIButton!) {
-        println("assembly tapped")
-        currentPicker = _ca_assembly
-        pickerView.reloadAllComponents()
-        pickerViewView.hidden = false;
-    }
-    
-    @IBAction func cancelButtonTapped(sender:UIButton!) {
-        println("cancel")
-        pickerViewView.hidden = true;
-        currentRow = 0
-    }
     @IBAction func doneButtonTapped(sender:UIButton!) {
-        println("done")
         
-        if (nameAndAddress.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
-            var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if (name.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
+            && address1.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
+            && city.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
+            && zip.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) >= 5
+            && phone.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+                println("everything has length")
+                error.hidden = true
+                var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()
+            
+                var nameAndAddress = "\(name.text)\n\(address1.text)\n"
+                if (address2.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+                    nameAndAddress += address2.text + "\n"
+                }
+                nameAndAddress += "\(city.text), CA \(zip.text)\n\(phone.text)"
+            
+                println(nameAndAddress)
+                
+                
+                prefs.setObject(nameAndAddress, forKey: "NAME_AND_ADDRESS")
+                prefs.setObject(name.text, forKey: "NAME_KEY")
+                prefs.setObject(address1.text, forKey: "ADDRESS2_KEY")
+                prefs.setObject(address2.text, forKey: "ADDRESS1_KEY")
+                prefs.setObject(city.text, forKey: "CITY_KEY")
+                prefs.setObject(zip.text, forKey: "ZIP_KEY")
+                prefs.setObject(phone.text, forKey: "PHONE_KEY")
+            
             prefs.setInteger(1,forKey:"ISLOGGEDIN")
             prefs.synchronize()
             self.performSegueWithIdentifier("goto_map", sender: self)
+        } else {
+            error.hidden = false
         }
         
-        /*
-        pickerViewView.hidden = true
         
-        if (currentPicker == _us_house) {
-            houseLabel.text = _us_house[currentRow]
-            prefs.setObject(_us_house[currentRow],forKey:"US_HOUSE")
-            prefs.setObject(_us_house_emails[currentRow],forKey:"US_HOUSE_EMAIL")
-        } else if (currentPicker == _ca_senate) {
-            senateLabel.text = _ca_senate[currentRow]
-            prefs.setObject(_ca_senate[currentRow],forKey:"CA_SENATE")
-            prefs.setObject(_ca_senate_emails[currentRow],forKey:"CA_SENATE_EMAIL")
-        } else if (currentPicker == _ca_assembly) {
-            assemblyLabel.text = _ca_assembly[currentRow]
-            prefs.setObject(_ca_assembly[currentRow],forKey:"CA_ASSEMBLY")
-            prefs.setObject(_ca_assembly_emails[currentRow],forKey:"CA_ASSEMBLY_EMAIL")
-        }
-
-        prefs.synchronize()
-        */
-        currentRow = 0
     }
     
-    func pickerView(pickerView:UIPickerView, numberOfRowsInComponent component:NSInteger) -> Int {
-        return currentPicker.count;
-    }
-    
-    func numberOfComponentsInPickerView(pickerView:UIPickerView) -> Int {
-        return 1;
-    }
-    
-    func pickerView(pickerView:UIPickerView, didSelectRow row:Int, inComponent component:Int) {
-        currentRow = row
-    }
-    
-    
-    func pickerView(pickerView:UIPickerView, titleForRow row:NSInteger, forComponent component:NSInteger) -> String {
-        return currentPicker[row]
-    }
-    
-    func pickerView(pickerView:UIPickerView, widthForComponenet component:NSInteger) -> Int {
-        return 300;
-    }
 
 }
