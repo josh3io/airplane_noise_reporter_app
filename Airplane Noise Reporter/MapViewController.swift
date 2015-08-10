@@ -31,9 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var doLogoutOnLoad:Bool = false
     var doShowLogin:Bool = false
     
-    var initialZoomComplete:Bool = false
     var initialCenterComplete:Bool = false
-    
     var updateTimer:NSTimer = NSTimer()
     var doingUpdateMapFromApi:Double = 0
     
@@ -70,36 +68,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     func mapView(mapView: MKMapView!, didUpdateUserLocation userLocation: MKUserLocation!) {
         mapView.centerCoordinate = userLocation.location.coordinate
-        println("mapView didUpdateUserLocation, initialZoomComplete: \(initialZoomComplete)")
-        if (initialZoomComplete == false) {
-            let userLocation = mapView.userLocation
-            if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
-                
-                let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 75000, 75000)
-                let adjustedRegion = mapView.regionThatFits(region)
-                mapView.setRegion(adjustedRegion, animated: true)
-                
-                initialZoomComplete = true
-            }
+        
+    }
+    
+    
+    override func viewWillLayoutSubviews() -> Void {
+        let userLocation = mapView.userLocation
+        
+        if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
+        let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 45000, 45000)
+        let adjustedRegion = mapView.regionThatFits(region)
+        mapView.setRegion(adjustedRegion, animated: true)
+        super.viewWillLayoutSubviews()
         }
     }
     
-    func checkInitialZoom() -> Void {
-        //println("check initial zoom \(initialZoomComplete) loc \(mapView.userLocation)")
-        if ( mapView.userLocation != nil && initialZoomComplete == false) {
-            
-            let userLocation = mapView.userLocation
-            println("userLocation coordinate \(userLocation.coordinate.latitude),\(userLocation.coordinate.longitude)")
-            if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
-                let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 75000, 75000)
-                let adjustedRegion = mapView.regionThatFits(region)
-                mapView.setRegion(adjustedRegion, animated: true)
-                
-                initialZoomComplete = true
-            }
-        }
-        
-    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         let id:String = segue.identifier! as String
@@ -131,8 +114,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 self.doUpdateMapFromApi()
                 self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
             }
-
-            checkInitialZoom()
+            
         }
     }
     
@@ -176,17 +158,33 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         
         self.doUpdateMapFromApi()
-        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(2, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(animated: Bool) {
         println("mapview viewWillAppear")
         super.viewWillAppear(animated);
         mapView.delegate = self
+        var tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: "MapView")
+        
+        var builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        
+        
     }
     
     func doUpdateMapFromApi() {
         myAPI.getAirplaneFeed(doProcessJSONLocations)
+    }
+    
+    func mapView(mapView:MKMapView!, didSelectAnnotationView view: MKAnnotationView) {
+        var tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName,value:"MapView")
+        let event = GAIDictionaryBuilder.createEventWithCategory("Map", action: "tap", label: "airplane", value: 1).build() as [NSObject:AnyObject]
+        tracker.send(event)
+        tracker.set(kGAIScreenName,value:nil)
+        
     }
     
     
@@ -215,13 +213,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if control == annotationView.rightCalloutAccessoryView {
             println("goto mail")
             reportHexId = annotationView.annotation.title!
+            
+            var tracker = GAI.sharedInstance().defaultTracker
+            tracker.set(kGAIScreenName,value:"MapView")
+            let event = GAIDictionaryBuilder.createEventWithCategory("Map", action: "tap", label: "AlertButton", value:  1).build() as [NSObject:AnyObject]
+            tracker.send(event)
+            tracker.set(kGAIScreenName,value:nil)
+            
+            
             self.performSegueWithIdentifier("showSendReport", sender: self)
         }
     }
     
     
     func doProcessJSONLocations(data:JSON) {
-        checkInitialZoom()
+        //checkInitialZoom()
         let now:Double = NSDate().timeIntervalSince1970
         let numLat = NSNumber(double: self.location.latitude as Double)
         let stLat:String = numLat.stringValue
@@ -261,7 +267,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         for (hexId:String,anno:MapAnnotation) in markersLookup {
             if (airplaneInNewList[hexId] == nil) {
                 // not in data set; remove it
-                println("not in data set, remove \(hexId): \(anno)")
+                //println("not in data set, remove \(hexId): \(anno)")
                 
                 mapView.removeAnnotation(anno)
                 
@@ -271,14 +277,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
             } else if (airplanes[hexId] != nil) {
                 if (anno.updateTime <= airplanes[hexId]!.updateTime) {
-                    println("update marker coords \(hexId) track \(airplanes[hexId]!.track)")
+                    //println("update marker coords \(hexId) track \(airplanes[hexId]!.track)")
                     anno.updateTime = airplanes[hexId]!.updateTime
                     anno.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon),track:airplanes[hexId]!.track)
                     markerExists[hexId] = true
                     
                 } else if (markersLookup[hexId]!.updateTime < now - 300) {
                     // too old, remove it
-                    println("too old, remove marker \(hexId)")
+                    //println("too old, remove marker \(hexId)")
                     mapView.removeAnnotation(anno)
                     markersLookup.removeValueForKey(hexId)
                     markerExists[hexId] = false
@@ -290,8 +296,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 }
             } else {
                 // we don't know about the airplane for some reason?
-                println("skip unknown marker \(hexId)")
-                println("removing found marker without matching plane: \(hexId)")
+                //println("skip unknown marker \(hexId)")
+                //println("removing found marker without matching plane: \(hexId)")
                 mapView.removeAnnotation(anno)
                 markersLookup.removeValueForKey(hexId)
                 markerExists[hexId] = false
@@ -404,7 +410,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateTimer.invalidate()
-        initialZoomComplete = false
         initialCenterComplete = false
     }
     

@@ -49,7 +49,7 @@ class MapAnnotation : NSObject, MKAnnotation
     func setViewImageForTrack(view:MKAnnotationView,track:Double) -> Void {
         //println("rotate icon to \(track) degrees")
         
-        println("\(title) data track \(track)")
+        //println("\(title) data track \(track)")
         let rotatedImage:UIImage = rotateImageByDegrees(planeIcon!, degrees: track)
         view.image = rotatedImage
         
@@ -66,6 +66,8 @@ class MapAnnotation : NSObject, MKAnnotation
         var theButton:UIButton = UIButton(frame: CGRect(origin: CGPoint(x:0,y:0), size:image.size))
         theButton.setImage(image,forState:UIControlState.Normal);
         view.rightCalloutAccessoryView = theButton
+        
+        
         return view
     }
 
@@ -76,7 +78,7 @@ class MapAnnotation : NSObject, MKAnnotation
         viewBox.transform = transform
         let rotatedSize:CGSize = viewBox.frame.size
         
-        println("\(title) heading \(degrees) radians \(radians)")
+        //println("\(title) heading \(degrees) radians \(radians)")
         
         UIGraphicsBeginImageContextWithOptions(rotatedSize, false, UIScreen.mainScreen().scale)
         var bitmap:CGContextRef = UIGraphicsGetCurrentContext()

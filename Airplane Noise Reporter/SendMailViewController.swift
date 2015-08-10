@@ -29,6 +29,16 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
         self.myAPI = appDelegate.airplaneNoiseApi
         super.init(coder:aDecoder)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        var tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: "SendMailViewController")
+        
+        var builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+    }
+    
     override func viewDidLoad() {
         buildRepsList()
         buildDefaultBody()
@@ -159,26 +169,38 @@ class SendMailViewController: UIViewController, MFMailComposeViewControllerDeleg
     func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         controller.dismissViewControllerAnimated(true, completion: nil)
         
+        var mailResult:String = ""
         switch result.value {
             
         case MFMailComposeResultCancelled.value:
             println("Mail Cancelled")
+            mailResult="cancelled"
             break
         case MFMailComposeResultSaved.value:
             println("Mail Saved")
+            mailResult="saved"
             break
         case MFMailComposeResultSent.value:
             myAPI.logComplaint(thePlane!)
             println("Mail Sent")
+            mailResult="sent"
             
             break
         case MFMailComposeResultFailed.value:
             println("Mail Failed")
+            mailResult="failed"
             break
         default:
             break
             
         }
+        
+        var tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName,value:"SendMailView")
+        let event = GAIDictionaryBuilder.createEventWithCategory("SendMail", action: "mailComposeResult", label: mailResult, value: 1).build() as [NSObject:AnyObject]
+        tracker.send(event)
+        tracker.set(kGAIScreenName,value:nil)
+        
         self.performSegueWithIdentifier("cancelSendReport", sender: self)
     }
 }

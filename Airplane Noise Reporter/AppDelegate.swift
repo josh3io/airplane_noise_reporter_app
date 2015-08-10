@@ -52,6 +52,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.shareModel.afterResume = false
         self.addLocationToPList(false)
         
+        println("init google analytics")
+        var configureError:NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google Analytics: \(configureError)")
+        
+        
         println("done application")
         return true
     }
