@@ -31,6 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     var doLogoutOnLoad:Bool = false
     var doShowLogin:Bool = false
     
+    var initialZoomComplete:Bool = false
     var initialCenterComplete:Bool = false
     var updateTimer:NSTimer = NSTimer()
     var doingUpdateMapFromApi:Double = 0
@@ -75,12 +76,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewWillLayoutSubviews() -> Void {
         let userLocation = mapView.userLocation
         
-        if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
-        let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 45000, 45000)
-        let adjustedRegion = mapView.regionThatFits(region)
-        mapView.setRegion(adjustedRegion, animated: true)
-        super.viewWillLayoutSubviews()
+        if (initialZoomComplete == false && userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
+            let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 45000, 45000)
+            let adjustedRegion = mapView.regionThatFits(region)
+            mapView.setRegion(adjustedRegion, animated: true)
+            initialZoomComplete = true
         }
+        super.viewWillLayoutSubviews()
+
     }
     
     
@@ -269,7 +272,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 // not in data set; remove it
                 //println("not in data set, remove \(hexId): \(anno)")
                 
-                mapView.removeAnnotation(anno)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.removeAnnotation(anno)
+                })
                 
                 airplanes.removeValueForKey(hexId)
                 markersLookup.removeValueForKey(hexId)
@@ -285,7 +290,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 } else if (markersLookup[hexId]!.updateTime < now - 300) {
                     // too old, remove it
                     //println("too old, remove marker \(hexId)")
-                    mapView.removeAnnotation(anno)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.mapView.removeAnnotation(anno)
+                    })
                     markersLookup.removeValueForKey(hexId)
                     markerExists[hexId] = false
                 } else {
@@ -298,7 +305,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 // we don't know about the airplane for some reason?
                 //println("skip unknown marker \(hexId)")
                 //println("removing found marker without matching plane: \(hexId)")
-                mapView.removeAnnotation(anno)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.removeAnnotation(anno)
+                })
                 markersLookup.removeValueForKey(hexId)
                 markerExists[hexId] = false
             }
@@ -316,6 +325,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
                 let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:lat,longitude:lon), title: hexId, subtitle: "\(groundSpeed)kts @ \(altitude)ft", updateTime:now, track:track)
                 
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.addAnnotation(newMarker)
+                })
                 mapView.addAnnotation(newMarker)
                 markersLookup[hexId] = newMarker
             }
@@ -364,12 +376,16 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             }
             else if (anno.getUpdateTime() < now - 300) {
                 println("remove old by expiry for \(anno.title)")
-                self.mapView.removeAnnotation(anno)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.removeAnnotation(anno)
+                })
                 oldIdents[anno.title] = false
             }
             else if (newIdents[anno.title] != nil) {
                 println("remove old for \(anno.title)")
-                self.mapView.removeAnnotation(anno)
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.mapView.removeAnnotation(anno)
+                })
                 oldIdents[anno.title] = false
             }
             else if (oldIdents[anno.title] != true) {
@@ -383,8 +399,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 markers.append(anno)
             }
         }
-        self.mapView.addAnnotations(newMarkers)
-        self.markers = markers
+        dispatch_async(dispatch_get_main_queue(), {
+            
+            self.mapView.addAnnotations(newMarkers)
+            self.markers = markers
+        })
         
         if (!doingMapChange) {
             var center:CLLocationCoordinate2D  = self.mapView.centerCoordinate
@@ -410,6 +429,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateTimer.invalidate()
+        initialZoomComplete = false
         initialCenterComplete = false
     }
     
