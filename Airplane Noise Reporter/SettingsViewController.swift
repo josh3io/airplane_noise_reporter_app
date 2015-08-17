@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     var myAPI:AirplaneNoiseApi
     
@@ -84,6 +84,15 @@ class SettingsViewController: UIViewController {
         
     }
     
+    func textFieldShouldReturn(textField:UITextField) -> Bool {
+        textField.resignFirstResponder();
+        return true;
+    }
+    
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        self.view.endEditing(true)
+    }
+    
     /*
     func textViewDidChange(textView: UITextView) {
     println("textivew did change: \(textView.text)")
@@ -92,13 +101,19 @@ class SettingsViewController: UIViewController {
     }
     */
     
+    func checkLength(string:NSString,numBytes:Int) -> Bool {
+        if (string.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > numBytes) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     @IBAction func doneButtonTapped(sender:UIButton!) {
         
-        if (name.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
-            && address1.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
-            && city.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0
-            && zip.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) >= 5
-            && phone.text.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 0) {
+        if (checkLength(name.text,numBytes:0) && checkLength(address1.text,numBytes:0) && checkLength(city.text,numBytes:0)
+            && checkLength(zip.text,numBytes:4) && checkLength(phone.text, numBytes: 0))
+        {
                 println("everything has length")
                 error.hidden = true
                 var prefs:NSUserDefaults = NSUserDefaults.standardUserDefaults()

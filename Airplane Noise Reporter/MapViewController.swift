@@ -33,6 +33,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     var initialZoomComplete:Bool = false
     var initialCenterComplete:Bool = false
+    var initLocationTimer:NSTimer = NSTimer()
     var updateTimer:NSTimer = NSTimer()
     var doingUpdateMapFromApi:Double = 0
     
@@ -72,10 +73,11 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
     }
     
-    
+    /*
     override func viewWillLayoutSubviews() -> Void {
         let userLocation = mapView.userLocation
         
+        println("recentering and rezooming")
         if (initialZoomComplete == false && userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
             let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 45000, 45000)
             let adjustedRegion = mapView.regionThatFits(region)
@@ -85,6 +87,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         super.viewWillLayoutSubviews()
 
     }
+    */
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -162,6 +165,29 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         
         self.doUpdateMapFromApi()
         self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "doUpdateMapFromApi", userInfo: nil, repeats: true)
+        startInitTimer()
+    }
+    
+    
+    
+    func onTick(timer:NSTimer) {
+        let userLocation = mapView.userLocation
+        
+        println("recentering and rezooming on timer")
+        if (userLocation.coordinate.latitude != 0.0 && userLocation.coordinate.longitude != 0.0) {
+            let region = MKCoordinateRegionMakeWithDistance(userLocation.coordinate, 45000, 45000)
+            let adjustedRegion = mapView.regionThatFits(region)
+            mapView.setRegion(adjustedRegion, animated: true)
+            initialZoomComplete = true
+            timer.invalidate()
+        }
+    }
+    
+    
+    
+    func startInitTimer() {
+        self.initLocationTimer = NSTimer.scheduledTimerWithTimeInterval(0.5,target:self,selector:Selector("onTick:"),userInfo:nil,repeats:true);
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -282,11 +308,21 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 
             } else if (airplanes[hexId] != nil) {
                 if (anno.updateTime <= airplanes[hexId]!.updateTime) {
-                    //println("update marker coords \(hexId) track \(airplanes[hexId]!.track)")
-                    anno.updateTime = airplanes[hexId]!.updateTime
-                    anno.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon),track:airplanes[hexId]!.track)
+                    //println("update marker coords \(hexId) (\(airplanes[hexId]!.lat),\(airplanes[hexId]!.lon)) track \(airplanes[hexId]!.track)")
+                    //anno.updateTime = airplanes[hexId]!.updateTime
+                    //anno.updateCoordinate(CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon),track:airplanes[hexId]!.track)
                     markerExists[hexId] = true
-                    
+                    let newMarker = MapAnnotation(coordinate: CLLocationCoordinate2D(latitude:airplanes[hexId]!.lat,longitude:airplanes[hexId]!.lon), title: hexId, subtitle: "\(airplanes[hexId]!.groundSpeed)kts @ \(airplanes[hexId]!.altitude)ft", updateTime:now, track:airplanes[hexId]!.track)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.mapView.removeAnnotation(anno)
+                        
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.mapView.addAnnotation(newMarker)
+                        })
+                        self.mapView.addAnnotation(newMarker)
+                        self.markersLookup[hexId] = newMarker
+                    })
                 } else if (markersLookup[hexId]!.updateTime < now - 300) {
                     // too old, remove it
                     //println("too old, remove marker \(hexId)")
@@ -332,6 +368,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
                 markersLookup[hexId] = newMarker
             }
         }
+        self.view.setNeedsDisplay()
         myAPI.airplanes = airplanes
     }
     
@@ -429,6 +466,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.updateTimer.invalidate()
+        self.initLocationTimer.invalidate()
         initialZoomComplete = false
         initialCenterComplete = false
     }
